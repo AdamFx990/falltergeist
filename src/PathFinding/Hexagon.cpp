@@ -73,8 +73,10 @@ bool Hexagon::canWalkThru()
 Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
 {
     Point delta = hexagon->position() - _position;
-    int dx = delta.x();
-    int dy = delta.y();
+    const int dx = delta.x();
+    const int dy = delta.y();
+
+    const double angleMod = 180.0 * 0.3183098862851122; //  180 * 1/PI
 
     unsigned char result;
 
@@ -83,14 +85,11 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
         // trigonometry magic.
         // basically, we try to find angle to second hex in circle, where first hex is center
         // and then find out to which of 60� slices it belongs
+        const double degree = atan2((double)-dy, (double)dx) * angleMod; //  180 * 1/PI
+        const int nextFace = 360 - (degree + 180) - 90;
+        result = (nextFace + ((char) - (nextFace < 0) & 360)) / 60;
 
-        double degree = atan2((double)-dy, (double)dx) * 180.0 * 0.3183098862851122; //  180 * 1/PI
-
-        result = (360 - ((signed int)degree + 180) - 90 + ((char)-(360 - ((signed int)degree + 180) - 90 < 0) & 360)) / 60;
-        if ( result > 5 )
-        {
-            result = 5;
-        }
+        if (result > 5) result = 5;
     }
     else if ( dy < 0 )
     {
@@ -100,7 +99,6 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
     {
         result = 2;
     }
-
     return Game::Orientation(result); // TODO: this is wrong. orientation!=direction
 }
 
@@ -115,11 +113,6 @@ unsigned int Hexagon::subLight(unsigned int light)
 {
     _light -= light;
     if ((int)_light < 655) _light = 655;
-    return _light;
-}
-
-unsigned int Hexagon::light()
-{
     return _light;
 }
 

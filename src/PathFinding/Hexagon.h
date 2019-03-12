@@ -68,26 +68,27 @@ public:
     { return _heuristic; }
     inline void setHeuristic(unsigned int value)
     { _heuristic = value; }
-
+    // Cube X
     inline int cubeX()
     { return _cubeX; }
     inline void setCubeX(unsigned int value)
     { _cubeX = value; }
-
+    // Cube Y
     inline int cubeY()
     { return _cubeY; }
     inline void setCubeY(unsigned int value)
     { _cubeY = value; }
-
+    // Cube Z
     inline int cubeZ()
     { return _cubeZ; }
     inline void setCubeZ(unsigned int value)
     { _cubeZ = value; }
-
+    // Light
+    inline unsigned int light()
+    { return _light; }
     unsigned int addLight(unsigned int light);
     unsigned int subLight(unsigned int light);
     unsigned int setLight(unsigned int light);
-    unsigned int light();
 
     bool canWalkThru();
 
