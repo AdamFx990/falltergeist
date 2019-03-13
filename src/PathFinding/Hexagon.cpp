@@ -76,7 +76,7 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
     const int dx = delta.x();
     const int dy = delta.y();
 
-    const double angleMod = 180.0 * 0.3183098862851122; //  180 * 1/PI
+    const double angelMod = 180.0 * 0.3183098862851122; //  180 * 1/PI
 
     unsigned char result;
 
@@ -85,7 +85,7 @@ Game::Orientation Hexagon::orientationTo(Hexagon *hexagon)
         // trigonometry magic.
         // basically, we try to find angle to second hex in circle, where first hex is center
         // and then find out to which of 60� slices it belongs
-        const double degree = atan2((double)-dy, (double)dx) * angleMod; //  180 * 1/PI
+        const double degree = atan2((double)-dy, (double)dx) * angelMod;
         const int nextFace = 360 - (degree + 180) - 90;
         result = (nextFace + ((char) - (nextFace < 0) & 360)) / 60;
 

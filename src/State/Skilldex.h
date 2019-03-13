@@ -30,23 +30,35 @@
 
 namespace Falltergeist
 {
-    namespace State
-    {
-        class Skilldex : public State
-        {
-            public:
-                Skilldex();
-                ~Skilldex() override;
+namespace State
+{
+class Skilldex : public State
+{
+public:
+    Skilldex();
+    ~Skilldex() override;
 
-                void init() override;
+    void init() override;
 
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
 
-                void onKeyDown(Event::Keyboard* event) override;
-                void onStateActivate(Event::State* event) override;
+    void onCancelButtonClick();
+    void onSkillButtonClick(SKILL skill);
 
-                void onCancelButtonClick();
-                void onSkillButtonClick(SKILL skill);
-        };
-    }
+private:
+    // The number of skills in the skilldex
+    static const int _skillCount = 8;
+    // Cache of calculated verticle offset values for UI elements.
+    int _vertUiOffsets[_skillCount];
+    Point _viewCentre;
+    UI::Image* _background = new Image("art/intrface/skldxbox.frm");
+
+    SKILL getSkillByIndex(int i) const;
+    void initButtons();
+    void initCounters();
+    void initLabels();
+};
+}
 }
 #endif // FALLTERGEIST_STATE_SKILLDEX_H
