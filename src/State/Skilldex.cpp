@@ -47,14 +47,7 @@ namespace State
 {
 using namespace UI;
 
-Skilldex::Skilldex() : State()
-{
-    // original coordinates = 455x6
-    Graphics::Size rendSize = Game::getInstance()->renderer()->size();
-    // background size = 185x368
-    _viewCentre.setX((rendSize.width() + 640 - 2 * _background->size().width()) / 2);
-    _viewCentre.setY(rendSize.height() - 480 + 6);
-}
+Skilldex::Skilldex() : State() {}
 
 Skilldex::~Skilldex() {}
 
@@ -79,7 +72,7 @@ SKILL Skilldex::getSkillByIndex(int i) const
 void Skilldex::initButtons()
 {
     // set x & y co-ords to use as a starting point
-    const int x = _viewCentre.x + 14; const int y = _viewCentre.y + 44;
+    const int x = _viewCentre.x() + 14; const int y = _viewCentre.y() + 44;
     // Initalise skill buttons
     for (int i = 0; i < _skillCount; i++)
     {
@@ -91,7 +84,7 @@ void Skilldex::initButtons()
     }
     // Initalise cancel button
     auto cancelButton = new ImageButton(
-         ImageButton::Type::SKILLDEX_BUTTON, _viewCentre.x + 48, _viewCentre.y + 338);
+         ImageButton::Type::SKILLDEX_BUTTON, _viewCentre.x() + 48, _viewCentre.y() + 338);
     cancelButton->mouseClickHandler().add(
          std::bind(&Skilldex::onCancelButtonClick, this));
     addUI(cancelButton);
@@ -100,7 +93,7 @@ void Skilldex::initButtons()
 void Skilldex::initCounters()
 {
     // set x & y co-ords to use as a starting point
-    const int x = _viewCentre.x + 111; const int y = _viewCentre.y + 48;
+    const int x = _viewCentre.x() + 111; const int y = _viewCentre.y() + 48;
     const std::shared_ptr<Game::DudeObject> player = Game::getInstance()->player();
     // Initalise skill counters
     for (int i = 0; i < _skillCount; i++)
@@ -113,31 +106,30 @@ void Skilldex::initCounters()
 // Initalise Skilldex labels and add them to the UI
 void Skilldex::initLabels()
 {
-    const char* font = "font3.aff";
+    const std::string font = "font3.aff";
     const SDL_Color color = { 0xb8, 0x9c, 0x28, 0xff };
     // set x & y co-ords to use as a starting point
-    const int x = _viewCentre.x + 17; const int y = _viewCentre.y + 52;
+    const int x = _viewCentre.x() + 17; const int y = _viewCentre.y() + 52;
     // Initalise title (100) label
-    auto label = new TextArea(_t(MSG_SKILLDEX, 100), _viewCentre.x + 56, _viewCentre.y + 14);
+    auto label = new TextArea(_t(MSG_SKILLDEX, 100), _viewCentre.x() + 56, _viewCentre.y() + 14);
     label->setFont(font, color);
     label->setWidth(76);
     label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
     addUI(label);
-    // Initalise cancel (101) label
-    label = new TextArea(_t(MSG_SKILLDEX, 101), _viewCentre.x + 70, _viewCentre.y + 337);
-    label->setFont(font, color);
-    addUI(label);
     // Initalise skill labels
-    const int iMod = 102 + _skillCount;
-    for (int i = 102; i < iMod; i++)
+    for (int i = 0; i < _skillCount; i++)
     {
-        // TODO: Cache message text to reduce unecessary disk IO.
-        label = new TextArea(_t(MSG_SKILLDEX, i), x, y + _vertUiOffsets[i]);
+        // TODO: Cache message text to reduce unecessary disk IO (async if thread-safe).
+        label = new TextArea(_t(MSG_SKILLDEX, (i + 102)), x, y + _vertUiOffsets[i]);
         label->setFont(font, color);
         label->setWidth(84);
         label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
         addUI(label);
     }
+    // Initalise cancel (101) label
+    label = new UI::TextArea(_t(MSG_SKILLDEX, 101), _viewCentre.x() + 70, _viewCentre.y() + 337);
+    label->setFont(font, color);
+    addUI(label);
 }
 
 void Skilldex::init()
@@ -148,6 +140,13 @@ void Skilldex::init()
     setModal(true);
     setFullscreen(false);
     
+    // original coordinates = 455x6
+    Graphics::Size rendSize = Game::getInstance()->renderer()->size();
+    // background size = 185x368
+    auto background = new UI::Image("art/intrface/skldxbox.frm");
+    _viewCentre.setX((rendSize.width() + 640 - 2 * background->size().width()) / 2);
+    _viewCentre.setY(rendSize.height() - 480 + 6);
+
     // Vertical offset modifier for skilldex UI items.
     const int offsetMod = 36;
     /* Calculate verticle offset modifier for UI elements ahead of time to *
@@ -158,8 +157,8 @@ void Skilldex::init()
     }
     
     // Initalise background
-    _background->setPosition(_viewCentre);
-    addUI(_background);
+    background->setPosition(_viewCentre);
+    addUI(background);
     // Initalise buttons
     initButtons();
     // Initalise counters

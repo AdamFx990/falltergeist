@@ -49,10 +49,9 @@ public:
 private:
     // The number of skills in the skilldex
     static const int _skillCount = 8;
-    // Cache of calculated verticle offset values for UI elements.
+    // Cache of calculated vertical offset values for UI elements.
     int _vertUiOffsets[_skillCount];
     Point _viewCentre;
-    UI::Image* _background = new Image("art/intrface/skldxbox.frm");
 
     SKILL getSkillByIndex(int i) const;
     void initButtons();
