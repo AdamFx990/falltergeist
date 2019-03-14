@@ -25,6 +25,7 @@
 // Falltergeist includes
 #include "../Format/Enums.h"
 #include "../State/State.h"
+#include "../State/Menus/Menu.h"
 #include "../UI/ImageButton.h"
 #include "../UI/TextArea.h"
 #include "../UI/BigCounter.h"
@@ -36,7 +37,7 @@ namespace Falltergeist
 namespace State
 {
 
-class Skilldex : public State
+class Skilldex : public Menu
 {
 public:
     Skilldex();

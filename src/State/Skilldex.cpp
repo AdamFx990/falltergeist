@@ -44,7 +44,7 @@ namespace State
 {
 using namespace UI;
 // ctor
-Skilldex::Skilldex() : State() {}
+Skilldex::Skilldex() : Menu() {}
 // dtor
 Skilldex::~Skilldex() {}
 
