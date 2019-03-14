@@ -32,6 +32,7 @@ namespace Falltergeist
 {
 namespace State
 {
+
 class Skilldex : public State
 {
 public:
@@ -49,14 +50,20 @@ public:
 private:
     // The number of skills in the skilldex
     static const int _skillCount = 8;
-    // Cache of calculated vertical offset values for UI elements.
-    int _vertUiOffsets[_skillCount];
-    Point _viewCentre;
+    // Vertical offset modifier for UI elements
+    static const int _vertMod = 36;
+    
+    SKILL skillByIndex(int i) const;
+    
+    // Initalise a skilldex counter
+    inline BigCounter* initCounter(const int x, const int y) const
+    { return new BigCounter(x, y); }
 
-    SKILL getSkillByIndex(int i) const;
-    void initButtons();
-    void initCounters();
-    void initLabels();
+    TextArea* initLabel(const int x, const int y, const int msg, const bool centred = true) const;
+    ImageButton* initSkillButton(const int x, const int y, const int skill);
+
+    void initSkillButtons (const int x, const int y);
+    void initSkillCounters(const int x, const int y);
 };
 }
 }
