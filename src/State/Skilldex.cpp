@@ -69,7 +69,7 @@ SKILL Skilldex::skillByIndex(int i) const
 TextArea* Skilldex::initLabel(const int x, const int y, const int msg, const bool centred)
 {
     const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
-    const std::string font = "font3.aff";
+    const std::string font = "font3.aaf";
     // TODO: Cache message text to reduce unecessary disk IO.
     auto label =  new TextArea(_t(MSG_SKILLDEX, msg), x, y);
     label->setFont(font, col);
