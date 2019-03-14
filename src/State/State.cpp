@@ -67,26 +67,6 @@ namespace Falltergeist
             }
         }
 
-        int State::x() const
-        {
-            return _position.x();
-        }
-
-        void State::setX(int x)
-        {
-            _position.setX(x);
-        }
-
-        int State::y() const
-        {
-            return _position.y();
-        }
-
-        void State::setY(int y)
-        {
-            _position.setY(y);
-        }
-
         const Point& State::position() const
         {
             return _position;

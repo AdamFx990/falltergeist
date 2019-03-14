@@ -81,13 +81,6 @@ namespace Falltergeist
                 UI::ImageList* getImageList(const std::string& name);
                 UI::SmallCounter* getSmallCounter(const std::string& name);
 
-                // @todo: remove getters/setters for x, y?
-                virtual int x() const;
-                virtual void setX(int x);
-
-                virtual int y() const;
-                virtual void setY(int y);
-
                 virtual const Point& position() const;
                 virtual void setPosition(const Point& pos);
 
