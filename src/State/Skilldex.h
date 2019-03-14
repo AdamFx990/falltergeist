@@ -25,6 +25,9 @@
 // Falltergeist includes
 #include "../Format/Enums.h"
 #include "../State/State.h"
+#include "../UI/ImageButton.h"
+#include "../UI/TextArea.h"
+#include "../UI/BigCounter.h"
 
 // Third party includes
 
@@ -56,15 +59,16 @@ private:
     SKILL skillByIndex(int i) const;
     
     // Initalise a skilldex counter
-    inline BigCounter* initCounter(const int x, const int y) const
-    { return new BigCounter(x, y); }
+    inline UI::BigCounter* initCounter(const int x, const int y) const
+    { return new UI::BigCounter(x, y, 3); }
 
-    TextArea* initLabel(const int x, const int y, const int msg, const bool centred = true) const;
-    ImageButton* initSkillButton(const int x, const int y, const int skill);
+    UI::TextArea* initLabel(const int x, const int y, const int msg, const bool centred);
+    UI::ImageButton* initSkillButton(const int x, const int y, const int skill);
 
     void initSkillButtons (const int x, const int y);
     void initSkillCounters(const int x, const int y);
 };
+
 }
 }
 #endif // FALLTERGEIST_STATE_SKILLDEX_H

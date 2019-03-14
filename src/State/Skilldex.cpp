@@ -34,10 +34,7 @@
 #include "../State/ExitConfirm.h"
 #include "../State/Location.h"
 #include "../State/SettingsMenu.h"
-#include "../UI/BigCounter.h"
 #include "../UI/Image.h"
-#include "../UI/ImageButton.h"
-#include "../UI/TextArea.h"
 
 // Third party includes
 
@@ -69,7 +66,7 @@ SKILL Skilldex::skillByIndex(int i) const
 }
 
 // Initalise a skilldex label
-TextArea* Skilldex::initLabel(const int x, const int y, const int msg, const bool centred = true)
+TextArea* Skilldex::initLabel(const int x, const int y, const int msg, const bool centred)
 {
     const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
     const std::string font = "font3.aff";
@@ -90,7 +87,7 @@ ImageButton* Skilldex::initSkillButton(const int x, const int y, const int skill
         ImageButton::Type::SKILLDEX_BUTTON, x, y
     );
     button->mouseClickHandler().add(std::bind(
-        &onSkillButtonClick, this, skillByIndex(skill)
+        &Skilldex::onSkillButtonClick, this, skillByIndex(skill)
     ));
     return button;
 }
@@ -109,7 +106,7 @@ void Skilldex::initSkillButtons(const int x, const int y)
         addUI(button);
         // Labels
         auto label = initLabel(
-            lx, (ly + (_vertMod * i)), (i + 102)
+            lx, (ly + (_vertMod * i)), (i + 102), true
         );
         label->setWidth(84);
         addUI(label);
@@ -127,10 +124,6 @@ void Skilldex::initSkillCounters(const int x, const int y)
         );
         addUI(counter);
     }
-    // Initalise cancel (101) label
-    label = new UI::TextArea(_t(MSG_SKILLDEX, 101), _viewCentre.x() + 70, _viewCentre.y() + 337);
-    label->setFont(font, color);
-    addUI(label);
 }
 
 // Initalise the skilldex UI
@@ -153,7 +146,7 @@ void Skilldex::init()
     initSkillButtons((x + 14), (y + 44));
     initSkillCounters((x + 111), (y + 48));
     // Initalise the title
-    auto title = initLabel(x + 56, y + 14, 100);
+    auto title = initLabel(x + 56, y + 14, 100, true);
     title->setWidth(76);
     addUI(title);
     // Initalise the cancel button
@@ -161,7 +154,7 @@ void Skilldex::init()
         ImageButton::Type::SMALL_RED_CIRCLE, (x + 48), (y + 338)
     );
     cancelButton->mouseClickHandler().add(
-        std::bind(&onCancelButtonClick, this)
+        std::bind(&Skilldex::onCancelButtonClick, this)
     );
     addUI(cancelButton);
     // Label the cancel button
