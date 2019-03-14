@@ -46,20 +46,13 @@ namespace Falltergeist
 namespace State
 {
 using namespace UI;
-
-Skilldex::Skilldex() : State()
-{
-    // original coordinates = 455x6
-    Graphics::Size rendSize = Game::getInstance()->renderer()->size();
-    // background size = 185x368
-    _viewCentre.setX((rendSize.width() + 640 - 2 * _background->size().width()) / 2);
-    _viewCentre.setY(rendSize.height() - 480 + 6);
-}
-
+// ctor
+Skilldex::Skilldex() : State() {}
+// dtor
 Skilldex::~Skilldex() {}
 
 // Returns a skill based on where it appears in the skilldex
-SKILL Skilldex::getSkillByIndex(int i) const
+SKILL Skilldex::skillByIndex(int i) const
 {
     switch (i)
     {
@@ -75,97 +68,100 @@ SKILL Skilldex::getSkillByIndex(int i) const
     return SKILL::NONE;
 }
 
-// Initalise Skilldex buttons and add them to the UI
-void Skilldex::initButtons()
+// Initalise a skilldex label
+TextArea* Skilldex::initLabel(const int x, const int y, const int msg, const bool centred = true)
 {
-    // set x & y co-ords to use as a starting point
-    const int x = _viewCentre.x + 14; const int y = _viewCentre.y + 44;
-    // Initalise skill buttons
-    for (int i = 0; i < _skillCount; i++)
+    const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
+    const std::string font = "font3.aff";
+    // TODO: Cache message text to reduce unecessary disk IO.
+    auto label =  new TextArea(_t(MSG_SKILLDEX, msg), x, y);
+    label->setFont(font, col);
+    if (centred)
     {
-        auto button = new ImageButton(
-             ImageButton::Type::SKILLDEX_BUTTON, x, y + _vertUiOffsets[i]);
-        button->mouseClickHandler().add(
-            std::bind(&Skilldex::onSkillButtonClick, this, getSkillByIndex(i)));
-        addUI(button);
-    }
-    // Initalise cancel button
-    auto cancelButton = new ImageButton(
-         ImageButton::Type::SKILLDEX_BUTTON, _viewCentre.x + 48, _viewCentre.y + 338);
-    cancelButton->mouseClickHandler().add(
-         std::bind(&Skilldex::onCancelButtonClick, this));
-    addUI(cancelButton);
-}
-// Initalise Skilldex counters and add them to the UI
-void Skilldex::initCounters()
-{
-    // set x & y co-ords to use as a starting point
-    const int x = _viewCentre.x + 111; const int y = _viewCentre.y + 48;
-    const std::shared_ptr<Game::DudeObject> player = Game::getInstance()->player();
-    // Initalise skill counters
-    for (int i = 0; i < _skillCount; i++)
-    {
-        auto counter = new BigCounter(x, y + _vertUiOffsets[i], 3);
-        counter->setNumber(player->skillValue(getSkillByIndex(i)));
-        addUI(counter);
-    }
-}
-// Initalise Skilldex labels and add them to the UI
-void Skilldex::initLabels()
-{
-    const char* font = "font3.aff";
-    const SDL_Color color = { 0xb8, 0x9c, 0x28, 0xff };
-    // set x & y co-ords to use as a starting point
-    const int x = _viewCentre.x + 17; const int y = _viewCentre.y + 52;
-    // Initalise title (100) label
-    auto label = new TextArea(_t(MSG_SKILLDEX, 100), _viewCentre.x + 56, _viewCentre.y + 14);
-    label->setFont(font, color);
-    label->setWidth(76);
-    label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
-    addUI(label);
-    // Initalise cancel (101) label
-    label = new TextArea(_t(MSG_SKILLDEX, 101), _viewCentre.x + 70, _viewCentre.y + 337);
-    label->setFont(font, color);
-    addUI(label);
-    // Initalise skill labels
-    const int iMod = 102 + _skillCount;
-    for (int i = 102; i < iMod; i++)
-    {
-        // TODO: Cache message text to reduce unecessary disk IO.
-        label = new TextArea(_t(MSG_SKILLDEX, i), x, y + _vertUiOffsets[i]);
-        label->setFont(font, color);
-        label->setWidth(84);
         label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
+    }
+    return label;
+}
+
+// Initalise a skilldex button
+ImageButton* Skilldex::initSkillButton(const int x, const int y, const int skill)
+{
+    auto button = new ImageButton(
+        ImageButton::Type::SKILLDEX_BUTTON, x, y
+    );
+    button->mouseClickHandler().add(std::bind(
+        &onSkillButtonClick, this, skillByIndex(skill)
+    ));
+    return button;
+}
+
+// Initalises all skills' buttons and their labels
+void Skilldex::initSkillButtons(const int x, const int y)
+{
+    // Offset the label's origin so it appears inside the button
+    const int lx = x + 3; const int ly = y + 8;
+    for (int i = 0; i < _skillCount; i++)
+    {
+        // Buttons
+        auto button = initSkillButton(
+            x, y + (_vertMod * i), i
+        );
+        addUI(button);
+        // Labels
+        auto label = initLabel(
+            lx, (ly + (_vertMod * i)), (i + 102)
+        );
+        label->setWidth(84);
         addUI(label);
     }
 }
 
+// Initalises all the skilldex counters
+void Skilldex::initSkillCounters(const int x, const int y)
+{
+    for (int i = 0; i < _skillCount; i++)
+    {
+        auto counter = initCounter(x, y + (_vertMod * i));
+        counter->setNumber(Game::getInstance()->
+            player()->skillValue(skillByIndex(i))
+        );
+        addUI(counter);
+    }
+}
+
+// Initalise the skilldex UI
 void Skilldex::init()
 {
     if (_initialized) return;
     State::init();
-
+    
     setModal(true);
     setFullscreen(false);
-    
-    // Vertical offset modifier for skilldex UI items.
-    const int offsetMod = 36;
-    /* Calculate verticle offset modifier for UI elements ahead of time to *
-     * avoid repeating the same calculation for labels, counters & buttons */
-    for (int i = 0; i < _skillCount; i++)
-    {
-        _vertUiOffsets[i] = offsetMod * i;
-    }
-    
     // Initalise background
-    _background->setPosition(_viewCentre);
-    addUI(_background);
-    // Initalise buttons
-    initButtons();
-    // Initalise counters
-    initCounters();
-    // Initalise labels
-    initLabels();
+    auto rendSize = Game::getInstance()->renderer()->size();
+    auto background = new Image("art/intrface/skldxbox.frm");
+    // calculate the origin of the background
+    const int x = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
+    const int y = (rendSize.height() - 480 + 6);
+    background->setPosition({ x, y });
+    addUI(background);
+    // Initalise skills UI
+    initSkillButtons((x + 14), (y + 44));
+    initSkillCounters((x + 111), (y + 48));
+    // Initalise the title
+    auto title = initLabel(x + 56, y + 14, 100);
+    title->setWidth(76);
+    addUI(title);
+    // Initalise the cancel button
+    auto cancelButton = new ImageButton(
+        ImageButton::Type::SMALL_RED_CIRCLE, (x + 48), (y + 338)
+    );
+    cancelButton->mouseClickHandler().add(
+        std::bind(&onCancelButtonClick, this)
+    );
+    addUI(cancelButton);
+    // Label the cancel button
+    addUI(initLabel((x + 70), (y + 337), 101, false));
 }
 
 void Skilldex::onCancelButtonClick()
@@ -192,5 +188,6 @@ void Skilldex::onSkillButtonClick(SKILL skill)
     mouse->setState(Input::Mouse::Cursor::USE);
     Game::getInstance()->popState();
 }
+
 }
 }
