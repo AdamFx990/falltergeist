@@ -37,30 +37,30 @@ namespace State
 // ctor
 Menu::Menu() : State() {}
 
-TextArea* Menu::createLabel(const Point origin, const char* text, const bool centred)
+TextArea* Menu::createLabel(const Point origin,
+    const std::string* text, const TextArea::HorizontalAlign alignment)
 {
     const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
     const std::string font = "font3.aaf";
-    // TODO: Cache message text to reduce unecessary disk IO.
-    TextArea* label = new TextArea(std::string(text), origin);
+    TextArea* label = new TextArea(*text, origin);
     label->setFont(font, col);
-    if (centred)
-    {
-        label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
-    }
+    label->setHorizontalAlign(alignment);
     return label;
 }
-template <typename T>
-ImageButton* Menu::createButton(const Point origin, const ImageButton::Type type, Base::Delegate<T*> &onButtonClick)
+
+ImageButton* Menu::createButton(const Point origin,
+    const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
 {
     ImageButton* button = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, origin);
-    button->mouseClickHandler().add(onButtonClick);
+    button->mouseClickHandler().add(onClick);
     return button;
 }
 
-void Menu::createLabelledButton(Point origin, const Point labelOffset, const int vertGap, const char* text)
+void Menu::createLabelledButton(Point origin, const Point labelOffset,
+    const std::string* text, const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
 {
-
+    addUI(createButton(origin, type, onClick));
+    addUI(createLabel(origin + labelOffset, text, TextArea::HorizontalAlign::CENTER));
 }
 
 } // State

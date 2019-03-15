@@ -20,12 +20,15 @@
 #define FALLTERGEIST_STATE_MENU_H
 
 // C++ standard includes
+#include <functional>
 
 // Falltergeist includes
 #include "../../State/State.h"
 #include "../../UI/ImageButton.h"
 #include "../../UI/TextArea.h"
+#include "../../UI/Image.h"
 #include "../../Graphics/Point.h"
+#include "../../Event/Mouse.h"
 #include "../../Base/Delegate.h"
 
 // Third party includes
@@ -39,14 +42,22 @@ using namespace UI;
 class Menu : public State
 {
 public:
+    // ctor
     Menu();
-    // Defined by Menu
-    TextArea* createLabel(const Point origin, const char* text, const bool centred);
-    template <typename T>
-    ImageButton* createButton(const Point origin, const ImageButton::Type type, Base::Delegate<T*> &onMouseClick);
-    void createLabelledButton(Point origin, const Point labelOffset, const int vertGap, const char* text);
+
+    // Automatically place a fullscreen menu in the centre of the renderer
+    inline void centreMenu() // TODO: remove hardcoded values
+    { setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2); }
+
+    TextArea* createLabel (const Point origin,
+        const std::string* text, const TextArea::HorizontalAlign alignment);
+    ImageButton* createButton(const Point origin,
+        const ImageButton::Type type, std::function<void(Event::Mouse*)> onClick);
+    void createLabelledButton(Point origin, const Point labelOffset,
+        const std::string* text, const ImageButton::Type type, std::function<void(Event::Mouse*)> onClick);
 
 };
-}
-}
+
+} // State
+} // Falltergeist
 #endif // FALLTERGEIST_STATE_MENU_H
