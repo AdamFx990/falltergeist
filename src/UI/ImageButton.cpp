@@ -161,7 +161,7 @@ void ImageButton::_init(Type type)
             _downSound = "sound/sfx/ib3p1xx1.acm";
             _upSound = "sound/sfx/ib3lu1x1.acm";
             break;
-        case Type::SKILLDEX_BUTTON:
+        case Type::SKILLDEX:
             _butup = make_shared<Graphics::Sprite>("art/intrface/skldxoff.frm");
             _butdown = make_shared<Graphics::Sprite>("art/intrface/skldxon.frm");
             _downSound = "sound/sfx/ib2lu1x1.acm";

@@ -48,6 +48,7 @@ TextArea* Menu::createLabel(const Point origin,
     return label;
 }
 
+// Returns a button with a linked event handler
 ImageButton* Menu::createButton(const Point origin,
     const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
 {
@@ -56,8 +57,9 @@ ImageButton* Menu::createButton(const Point origin,
     return button;
 }
 
-void Menu::createLabelledButton(Point origin, const Point labelOffset,
-    const std::string* text, const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
+void Menu::createLabelledButton(Point origin, 
+    const Point labelOffset, const std::string* text,
+    const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
 {
     addUI(createButton(origin, type, onClick));
     addUI(createLabel(origin + labelOffset, text, TextArea::HorizontalAlign::CENTER));

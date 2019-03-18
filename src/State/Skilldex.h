@@ -64,7 +64,6 @@ private:
     { return new UI::BigCounter(x, y, 3); }
 
     UI::TextArea* initLabel(const int x, const int y, const int msg, const bool centred);
-    UI::ImageButton* initSkillButton(const int x, const int y, const int skill);
 
     void initSkillButtons (const int x, const int y);
     void initSkillCounters(const int x, const int y);

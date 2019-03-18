@@ -63,7 +63,7 @@ public:
         PANEL_CHA,
         PANEL_PIP,
         OPTIONS_BUTTON,
-        SKILLDEX_BUTTON,
+        SKILLDEX,
         INVENTORY_UP_ARROW,
         INVENTORY_DOWN_ARROW,
         PIPBOY_ALARM_BUTTON,

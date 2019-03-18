@@ -79,18 +79,6 @@ TextArea* Skilldex::initLabel(const int x, const int y, const int msg, const boo
     return label;
 }
 
-// Initalise a skilldex button
-ImageButton* Skilldex::initSkillButton(const int x, const int y, const int skill)
-{
-    auto button = new ImageButton(
-        ImageButton::Type::SKILLDEX_BUTTON, x, y
-    );
-    button->mouseClickHandler().add(std::bind(
-        &Skilldex::onSkillButtonClick, this, skillByIndex(skill)
-    ));
-    return button;
-}
-
 // Initalises all skills' buttons and their labels
 void Skilldex::initSkillButtons(const int x, const int y)
 {
@@ -99,14 +87,12 @@ void Skilldex::initSkillButtons(const int x, const int y)
     for (int i = 0; i < _skillCount; i++)
     {
         // Buttons
-        auto button = initSkillButton(
-            x, y + (_vertMod * i), i
-        );
-        addUI(button);
+        addUI(createButton(Point(x, y + (_vertMod * i)), 
+            ImageButton::Type::SKILLDEX, std::bind(
+                &Skilldex::onSkillButtonClick, this, skillByIndex(i))));
         // Labels
         auto label = initLabel(
-            lx, (ly + (_vertMod * i)), (i + 102), true
-        );
+            lx, (ly + (_vertMod * i)), (i + 102), true);
         label->setWidth(84);
         addUI(label);
     }
@@ -119,8 +105,7 @@ void Skilldex::initSkillCounters(const int x, const int y)
     {
         auto counter = initCounter(x, y + (_vertMod * i));
         counter->setNumber(Game::getInstance()->
-            player()->skillValue(skillByIndex(i))
-        );
+            player()->skillValue(skillByIndex(i)));
         addUI(counter);
     }
 }
@@ -149,10 +134,8 @@ void Skilldex::init()
     title->setWidth(76);
     addUI(title);
     // Initalise the cancel button
-    auto button = createButton(Point(x + 48, y + 338),
-        ImageButton::Type::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)
-    );
-    addUI(button);
+    addUI(createButton(Point(x + 48, y + 338), ImageButton::Type
+        ::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)));
     // Label the cancel button
     addUI(initLabel((x + 70), (y + 337), 101, false));
 }
