@@ -38,11 +38,11 @@ namespace State
 Menu::Menu() : State() {}
 
 TextArea* Menu::createLabel(const Point origin,
-    const std::string* text, const TextArea::HorizontalAlign alignment)
+    const std::string text, const TextArea::HorizontalAlign alignment)
 {
     const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
     const std::string font = "font3.aaf";
-    TextArea* label = new TextArea(*text, origin);
+    TextArea* label = new TextArea(text, origin);
     label->setFont(font, col);
     label->setHorizontalAlign(alignment);
     return label;
@@ -57,12 +57,19 @@ ImageButton* Menu::createButton(const Point origin,
     return button;
 }
 
+// Creates a button with a centred label and adds it to the UI
 void Menu::createLabelledButton(Point origin, 
-    const Point labelOffset, const std::string* text,
+    const Point labelOffset, const std::string text,
     const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
 {
-    addUI(createButton(origin, type, onClick));
-    addUI(createLabel(origin + labelOffset, text, TextArea::HorizontalAlign::CENTER));
+    auto button = createButton(origin, type, onClick);
+    // Offset the label's origin so it appears inside the button
+    auto label = createLabel(origin + labelOffset, text, TextArea::HorizontalAlign::CENTER);
+    // Button width - 2 so it's always at least 1px inside the button's borders.
+    label->setWidth(button->size().width() - 2);
+    
+    addUI(button);
+    addUI(label);
 }
 
 } // State

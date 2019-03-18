@@ -50,12 +50,15 @@ public:
     inline void centreMenu() // TODO: remove hardcoded values
     { setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2); }
 
-    TextArea* createLabel (const Point origin,
-        const std::string* text, const TextArea::HorizontalAlign alignment);
+    TextArea* createLabel(const Point origin,
+        const std::string text, const TextArea::HorizontalAlign alignment);
+    
     ImageButton* createButton(const Point origin,
         const ImageButton::Type type, std::function<void(Event::Mouse*)> onClick);
-    void createLabelledButton(Point origin, const Point labelOffset,
-        const std::string* text, const ImageButton::Type type, std::function<void(Event::Mouse*)> onClick);
+    
+    void createLabelledButton(Point origin, const Point labelOffset, 
+        const std::string text, const ImageButton::Type type,
+        std::function<void(Event::Mouse*)> onClick);
 
 };
 

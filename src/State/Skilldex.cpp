@@ -43,8 +43,17 @@ namespace Falltergeist
 namespace State
 {
 using namespace UI;
+
 // ctor
-Skilldex::Skilldex() : Menu() {}
+Skilldex::Skilldex() : Menu()
+{
+    // Get skill names from fallout data files
+    for(int i = 0; i < _skillCount; i++)
+    {
+        _skillText[i] =  _t(MSG_SKILLDEX, i + 102);
+    }
+}
+
 // dtor
 Skilldex::~Skilldex() {}
 
@@ -65,36 +74,19 @@ SKILL Skilldex::skillByIndex(int i) const
     return SKILL::NONE;
 }
 
-// Initalise a skilldex label
-TextArea* Skilldex::initLabel(const int x, const int y, const int msg, const bool centred)
-{
-    const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
-    const std::string font = "font3.aaf";
-    auto label =  new TextArea(_t(MSG_SKILLDEX, msg), x, y);
-    label->setFont(font, col);
-    if (centred)
-    {
-        label->setHorizontalAlign(TextArea::HorizontalAlign::CENTER);
-    }
-    return label;
-}
-
 // Initalises all skills' buttons and their labels
 void Skilldex::initSkillButtons(const int x, const int y)
 {
-    // Offset the label's origin so it appears inside the button
-    const int lx = x + 3; const int ly = y + 8;
+    // Offset applied to the labels' origin
+    const Point labelOffset(3, 8);
+    // The texture the buttons will use
+    const ImageButton::Type btnType = ImageButton::Type::SKILLDEX;
+
     for (int i = 0; i < _skillCount; i++)
     {
-        // Buttons
-        addUI(createButton(Point(x, y + (_vertMod * i)), 
-            ImageButton::Type::SKILLDEX, std::bind(
-                &Skilldex::onSkillButtonClick, this, skillByIndex(i))));
-        // Labels
-        auto label = initLabel(
-            lx, (ly + (_vertMod * i)), (i + 102), true);
-        label->setWidth(84);
-        addUI(label);
+        createLabelledButton(Point(x, y + (_vertMod * i)),
+            labelOffset, _skillText[i], btnType, std::bind(
+                &Skilldex::onSkillButtonClick, this, skillByIndex(i)));
     }
 }
 
@@ -118,6 +110,7 @@ void Skilldex::init()
     
     setModal(true);
     setFullscreen(false);
+    
     // Initalise background
     auto rendSize = Game::getInstance()->renderer()->size();
     auto background = new Image("art/intrface/skldxbox.frm");
@@ -126,18 +119,21 @@ void Skilldex::init()
     const int y = (rendSize.height() - 480 + 6);
     background->setPosition({ x, y });
     addUI(background);
+
     // Initalise skills UI
     initSkillButtons((x + 14), (y + 44));
     initSkillCounters((x + 111), (y + 48));
-    // Initalise the title
-    auto title = initLabel(x + 56, y + 14, 100, true);
+    // Initalise the title label (100)
+    auto title = createLabel(Point(x + 56, y + 14),
+        "Skilldex", TextArea::HorizontalAlign::CENTER);
     title->setWidth(76);
     addUI(title);
     // Initalise the cancel button
     addUI(createButton(Point(x + 48, y + 338), ImageButton::Type
         ::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)));
-    // Label the cancel button
-    addUI(initLabel((x + 70), (y + 337), 101, false));
+    // Label the cancel button (101)
+    addUI(createLabel(Point(x + 70, y + 337),
+        "Cancel", TextArea::HorizontalAlign::LEFT));
 }
 
 void Skilldex::onCancelButtonClick()
@@ -165,5 +161,5 @@ void Skilldex::onSkillButtonClick(SKILL skill)
     Game::getInstance()->popState();
 }
 
-}
-}
+} // State
+} // Falltergeist

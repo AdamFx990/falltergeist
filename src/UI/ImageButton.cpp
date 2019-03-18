@@ -46,13 +46,9 @@ ImageButton::ImageButton(Type type, Point pos) : Base(pos)
     _init(type);
 }
 
-ImageButton::ImageButton(Type type, int x, int y) : ImageButton(type, Point(x, y))
-{
-}
+ImageButton::ImageButton(Type type, int x, int y) : ImageButton(type, Point(x, y)) {}
 
-ImageButton::~ImageButton()
-{
-}
+ImageButton::~ImageButton() {}
 
 void ImageButton::_init(Type type)
 {
@@ -299,26 +295,28 @@ void ImageButton::render(bool eggTransparency)
     if(!_enabled) return;
     if ((_checkboxMode && _checked) || (_leftButtonPressed))
     {
-      _butdown->render(position().x(),position().y());
-      return;
+        _butdown->render(position().x(),position().y());
+        return;
     }
 
     _butup->render(position().x(),position().y());
-
 }
 
+bool ImageButton::opaque(const Point &pos) {
+    return opaque(pos.x(),pos.y());
+}
 
-    bool ImageButton::opaque(const Point &pos) {
-        return opaque(pos.x(),pos.y());
+bool ImageButton::opaque(unsigned int x, unsigned int y) {
+    if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
+    {
+        return _butdown->opaque(x,y);
     }
 
-    bool ImageButton::opaque(unsigned int x, unsigned int y) {
-        if ((_checkboxMode && _checked) || (_hovered && _leftButtonPressed))
-        {
-            return _butdown->opaque(x,y);
-        }
+    return _butup->opaque(x,y);
+}
 
-        return _butup->opaque(x,y);
-    }
-}
-}
+Size ImageButton::size() const
+{ return _butup->size(); }
+
+} // UI
+} // Falltergeist

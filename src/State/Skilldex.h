@@ -56,14 +56,14 @@ private:
     static const int _skillCount = 8;
     // Vertical offset modifier for UI elements
     static const int _vertMod = 36;
+    // Array of skill names used for labels
+    std::string _skillText[8];
     
     SKILL skillByIndex(int i) const;
     
     // Initalise a skilldex counter
     inline UI::BigCounter* initCounter(const int x, const int y) const
     { return new UI::BigCounter(x, y, 3); }
-
-    UI::TextArea* initLabel(const int x, const int y, const int msg, const bool centred);
 
     void initSkillButtons (const int x, const int y);
     void initSkillCounters(const int x, const int y);
