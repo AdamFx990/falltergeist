@@ -149,13 +149,10 @@ void Skilldex::init()
     title->setWidth(76);
     addUI(title);
     // Initalise the cancel button
-    auto cancelButton = new ImageButton(
-        ImageButton::Type::SMALL_RED_CIRCLE, (x + 48), (y + 338)
+    auto button = createButton(Point(x + 48, y + 338),
+        ImageButton::Type::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)
     );
-    cancelButton->mouseClickHandler().add(
-        std::bind(&Skilldex::onCancelButtonClick, this)
-    );
-    addUI(cancelButton);
+    addUI(button);
     // Label the cancel button
     addUI(initLabel((x + 70), (y + 337), 101, false));
 }

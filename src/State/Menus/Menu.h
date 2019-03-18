@@ -30,6 +30,7 @@
 #include "../../Graphics/Point.h"
 #include "../../Event/Mouse.h"
 #include "../../Base/Delegate.h"
+#include "../../Game/Game.h"
 
 // Third party includes
 

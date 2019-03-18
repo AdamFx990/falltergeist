@@ -51,7 +51,7 @@ TextArea* Menu::createLabel(const Point origin,
 ImageButton* Menu::createButton(const Point origin,
     const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
 {
-    ImageButton* button = new ImageButton(ImageButton::Type::SKILLDEX_BUTTON, origin);
+    ImageButton* button = new ImageButton(type, origin);
     button->mouseClickHandler().add(onClick);
     return button;
 }
