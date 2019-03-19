@@ -39,7 +39,11 @@ Menu::Menu() : State()
     // Initalise with the most commonly used menu font & colour
     _txtColour  = {0xb8, 0x9c, 0x28, 0xff};
     _font = "font3.aaf";
+    // Initalise the renderer size var
+    _rendSize = Game::getInstance()->renderer()->size();
 }
+// dtor
+Menu::~Menu() {}
 
 // Automatically place a fullscreen menu in the centre of the renderer
 void Menu::centreMenu()

@@ -42,9 +42,11 @@ using namespace UI;
 
 class Menu : public State
 {
-  public:
+public:
     // ctor
     Menu();
+
+    virtual ~Menu() override;
 
     void centreMenu();
 
@@ -66,6 +68,7 @@ class Menu : public State
 private:
     SDL_Color _txtColour;
     std::string _font;
+    Graphics::Size _rendSize;
 };
 
 } // namespace State
