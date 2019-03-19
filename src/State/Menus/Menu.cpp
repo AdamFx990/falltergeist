@@ -23,7 +23,6 @@
 // C++ standard includes
 #include <string>
 
-
 // Falltergeist includes
 #include "../../Game/Game.h"
 #include "../../Graphics/Renderer.h"
@@ -35,42 +34,65 @@ namespace Falltergeist
 namespace State
 {
 // ctor
-Menu::Menu() : State() {}
-
-TextArea* Menu::createLabel(const Point origin,
-    const std::string text, const TextArea::HorizontalAlign alignment)
+Menu::Menu() : State()
 {
-    const SDL_Color col = { 0xb8, 0x9c, 0x28, 0xff };
-    const std::string font = "font3.aaf";
-    TextArea* label = new TextArea(text, origin);
-    label->setFont(font, col);
+    // Initalise with the most commonly used menu font & colour
+    _txtColour  = {0xb8, 0x9c, 0x28, 0xff};
+    _font = "font3.aaf";
+}
+
+// Automatically place a fullscreen menu in the centre of the renderer
+void Menu::centreMenu()
+{
+    setPosition((Game::getInstance()-> // TODO: remove hardcoded values
+        renderer()->size() - Point(640, 480)) / 2);
+}
+
+// Set the font & colour used by labels & labelled buttons
+void Menu::setFont(const std::string font, const SDL_Colour colour)
+{
+    _font = font;
+    _txtColour = colour;
+}
+
+// Returns a label using this state's current font & colour
+TextArea* Menu::createLabel(const Point origin,
+                            const std::string text,
+                            const TextArea::HorizontalAlign alignment) const
+{
+    
+    TextArea *label = new TextArea(text, origin);
+    label->setFont(_font, _txtColour);
     label->setHorizontalAlign(alignment);
     return label;
 }
 
 // Returns a button with a linked event handler
 ImageButton* Menu::createButton(const Point origin,
-    const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
+                                const ImageButton::Type type,
+                                const std::function<void(Event::Mouse*)> onClick) const
 {
-    ImageButton* button = new ImageButton(type, origin);
+    ImageButton *button = new ImageButton(type, origin);
     button->mouseClickHandler().add(onClick);
     return button;
 }
 
 // Creates a button with a centred label and adds it to the UI
-void Menu::createLabelledButton(Point origin, 
-    const Point labelOffset, const std::string text,
-    const ImageButton::Type type, const std::function<void(Event::Mouse*)> onClick)
+void Menu::createLabelledButton(Point origin,
+                                const Point labelOffset,
+                                const std::string text,
+                                const ImageButton::Type type,
+                                const std::function<void(Event::Mouse*)> onClick)
 {
     auto button = createButton(origin, type, onClick);
     // Offset the label's origin so it appears inside the button
     auto label = createLabel(origin + labelOffset, text, TextArea::HorizontalAlign::CENTER);
     // Button width - 2 so it's always at least 1px inside the button's borders.
     label->setWidth(button->size().width() - 2);
-    
+
     addUI(button);
     addUI(label);
 }
 
-} // State
-} // Falltergeist
+} // namespace State
+} // namespace Falltergeist

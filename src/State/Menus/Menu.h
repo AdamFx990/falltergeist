@@ -42,26 +42,33 @@ using namespace UI;
 
 class Menu : public State
 {
-public:
+  public:
     // ctor
     Menu();
 
-    // Automatically place a fullscreen menu in the centre of the renderer
-    inline void centreMenu() // TODO: remove hardcoded values
-    { setPosition((Game::getInstance()->renderer()->size() - Point(640, 480)) / 2); }
+    void centreMenu();
+
+    virtual void setFont(const std::string font, const SDL_Colour colour);
 
     TextArea* createLabel(const Point origin,
-        const std::string text, const TextArea::HorizontalAlign alignment);
-    
-    ImageButton* createButton(const Point origin,
-        const ImageButton::Type type, std::function<void(Event::Mouse*)> onClick);
-    
-    void createLabelledButton(Point origin, const Point labelOffset, 
-        const std::string text, const ImageButton::Type type,
-        std::function<void(Event::Mouse*)> onClick);
+                          const std::string text,
+                          const TextArea::HorizontalAlign alignment) const;
 
+    ImageButton* createButton(const Point origin,
+                              const ImageButton::Type type,
+                              const std::function<void(Event::Mouse*)> onClick) const;
+
+    void createLabelledButton(Point origin,
+                              const Point labelOffset,
+                              const std::string text,
+                              const ImageButton::Type type,
+                              const std::function<void(Event::Mouse*)> onClick);
+private:
+    SDL_Color _txtColour;
+    std::string _font;
 };
 
-} // State
-} // Falltergeist
+} // namespace State
+} // namespace Falltergeist
+
 #endif // FALLTERGEIST_STATE_MENU_H
