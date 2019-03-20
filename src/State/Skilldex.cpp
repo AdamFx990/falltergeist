@@ -42,6 +42,7 @@ namespace Falltergeist
 {
 namespace State
 {
+
 using namespace UI;
 
 // ctor
@@ -53,7 +54,6 @@ Skilldex::Skilldex() : Menu()
         _skillText[i] =  _t(MSG_SKILLDEX, i + 102);
     }
 }
-
 // dtor
 Skilldex::~Skilldex() {}
 
@@ -107,7 +107,7 @@ void Skilldex::init()
 {
     if (_initialized) return;
     State::init();
-    
+
     setModal(true);
     setFullscreen(false);
 
@@ -138,7 +138,7 @@ void Skilldex::setPosition()
     const int y = (rendSize.height() - 480 + 6);
     background->setPosition({x, y});
     // set origin to the calculated background position
-    _origin = &background->position();
+    _origin = background->position();
 
     addUI(background);
 }

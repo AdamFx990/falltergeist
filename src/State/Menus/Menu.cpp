@@ -106,5 +106,28 @@ void Menu::createLabelledButton(const Point& origin,
     addUI(label);
 }
 
+/* Creates a number of labelled buttons using text extracted from the game's master.dat.
+ * This can be used for any menu providing the buttons are equally spaced and the label
+ * text is sorted sequentially when extracted from the .dat */ 
+void createLabelledButtons(const Point &origin,
+                           const Point &labelOffset,
+                           const int buttonCount,
+                           const MSG_TYPE msgType,
+                           const unsigned msgTxtStartingIndex,
+                           const int vertOffset,
+                           const ImageButton::Type btnType,
+                           const std::function<void(Event::Mouse*)> onClick)
+{
+    for (int i = 0; i < buttonCount; i++)
+    {
+        createLabelledButton(
+            Point(origin->x, origin->y + (vertOffset * i)), // origin
+            labelOffset, // label offset
+            _t(msgType, (msgTxtStartingIndex + i)), // text
+            btnType, // button sprite
+            onClick); // click event
+    }
+}
+
 } // namespace State
 } // namespace Falltergeist

@@ -64,10 +64,19 @@ public:
                               const std::function<void(Event::Mouse*)> onClick) const;
 
     void createLabelledButton(const Point &origin,
-                              const Point labelOffset,
+                              const Point &labelOffset,
                               const std::string text,
                               const ImageButton::Type type,
                               const std::function<void(Event::Mouse*)> onClick);
+
+    void createLabelledButtons(const Point &origin,
+                               const Point &labelOffset,
+                               const int buttonCount,
+                               const MSG_TYPE msgType,
+                               const unsigned msgTxtStartingIndex,
+                               const int vertOffset,
+                               const ImageButton::Type type,
+                               const std::function<void(Event::Mouse*)> onClick);
 
 private:
     SDL_Color _txtColour;
