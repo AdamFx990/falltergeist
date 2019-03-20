@@ -45,6 +45,8 @@ public:
 
     void init() override;
 
+    void setPosition() override;
+
     void onKeyDown(Event::Keyboard* event) override;
     void onStateActivate(Event::State* event) override;
 
@@ -58,6 +60,8 @@ private:
     static const int _vertMod = 36;
     // Array of skill names used for labels
     std::string _skillText[8];
+
+    const Point* _origin;
     
     SKILL skillByIndex(int i) const;
     

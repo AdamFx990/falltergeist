@@ -110,30 +110,37 @@ void Skilldex::init()
     
     setModal(true);
     setFullscreen(false);
-    
-    // Initalise background
-    auto rendSize = Game::getInstance()->renderer()->size();
-    auto background = new Image("art/intrface/skldxbox.frm");
-    // calculate the origin of the background
-    const int x = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
-    const int y = (rendSize.height() - 480 + 6);
-    background->setPosition({ x, y });
-    addUI(background);
 
     // Initalise skills UI
-    initSkillButtons((x + 14), (y + 44));
-    initSkillCounters((x + 111), (y + 48));
-    // Initalise the title label (100)
-    auto title = createLabel(Point(x + 56, y + 14),
+    initSkillButtons(_origin->x + 14, _origin->y + 44);
+    initSkillCounters(_origin->x + 111, _origin->y + 48);
+    // Initalise the title label (MSG_SKILLDEX, 100)
+    auto title = createLabel(Point(_origin->x + 56, _origin->y + 14),
         "Skilldex", TextArea::HorizontalAlign::CENTER);
     title->setWidth(76);
     addUI(title);
     // Initalise the cancel button
-    addUI(createButton(Point(x + 48, y + 338), ImageButton::Type
-        ::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)));
-    // Label the cancel button (101)
-    addUI(createLabel(Point(x + 70, y + 337),
+    addUI(createButton(Point(_origin->x + 48, _origin->y + 338), ImageButton
+        ::Type::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)));
+    // Label the cancel button (MSG_SKILLDEX, 101)
+    addUI(createLabel(Point(_origin->x + 70, _origin->y + 337),
         "Cancel", TextArea::HorizontalAlign::LEFT));
+}
+
+// Calculate the origin on the skilldex
+void Skilldex::setPosition()
+{
+    // Initalise background
+    auto rendSize = Game::getInstance()->renderer()->size();
+    auto background = createBackground("art/intrface/skldxbox.frm");    
+    // calculate the origin of the background
+    const int x = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
+    const int y = (rendSize.height() - 480 + 6);
+    background->setPosition({x, y});
+    // set origin to the calculated background position
+    _origin = &background->position();
+
+    addUI(background);
 }
 
 void Skilldex::onCancelButtonClick()

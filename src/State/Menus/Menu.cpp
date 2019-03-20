@@ -45,11 +45,10 @@ Menu::Menu() : State()
 // dtor
 Menu::~Menu() {}
 
-// Automatically place a fullscreen menu in the centre of the renderer
-void Menu::centreMenu()
+// Recalculate the menu's position
+void Menu::setPosition()
 {
-    setPosition((Game::getInstance()-> // TODO: remove hardcoded values
-        renderer()->size() - Point(640, 480)) / 2);
+    State::setPosition((_rendSize - Point(640, 480)) / 2);
 }
 
 // Set the font & colour used by labels & labelled buttons
@@ -59,8 +58,17 @@ void Menu::setFont(const std::string font, const SDL_Colour colour)
     _txtColour = colour;
 }
 
+Image* Menu::createBackground(std::string bgImage)
+{
+    Image* background = new Image(bgImage);
+    // Initalise size & position pointers
+    _menuSize   = &background->size();
+    _menuOrigin = &background->position();
+    return background;
+}
+
 // Returns a label using this state's current font & colour
-TextArea* Menu::createLabel(const Point origin,
+TextArea* Menu::createLabel(const Point& origin,
                             const std::string text,
                             const TextArea::HorizontalAlign alignment) const
 {
@@ -72,7 +80,7 @@ TextArea* Menu::createLabel(const Point origin,
 }
 
 // Returns a button with a linked event handler
-ImageButton* Menu::createButton(const Point origin,
+ImageButton* Menu::createButton(const Point& origin,
                                 const ImageButton::Type type,
                                 const std::function<void(Event::Mouse*)> onClick) const
 {
@@ -82,7 +90,7 @@ ImageButton* Menu::createButton(const Point origin,
 }
 
 // Creates a button with a centred label and adds it to the UI
-void Menu::createLabelledButton(Point origin,
+void Menu::createLabelledButton(const Point& origin,
                                 const Point labelOffset,
                                 const std::string text,
                                 const ImageButton::Type type,

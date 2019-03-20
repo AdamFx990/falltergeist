@@ -48,27 +48,33 @@ public:
 
     virtual ~Menu() override;
 
-    void centreMenu();
 
     virtual void setFont(const std::string font, const SDL_Colour colour);
 
-    TextArea* createLabel(const Point origin,
+    virtual void setPosition();
+
+    Image* createBackground(std::string bgImage);
+
+    TextArea* createLabel(const Point &origin,
                           const std::string text,
                           const TextArea::HorizontalAlign alignment) const;
 
-    ImageButton* createButton(const Point origin,
+    ImageButton* createButton(const Point &origin,
                               const ImageButton::Type type,
                               const std::function<void(Event::Mouse*)> onClick) const;
 
-    void createLabelledButton(Point origin,
+    void createLabelledButton(const Point &origin,
                               const Point labelOffset,
                               const std::string text,
                               const ImageButton::Type type,
                               const std::function<void(Event::Mouse*)> onClick);
+
 private:
     SDL_Color _txtColour;
     std::string _font;
     Graphics::Size _rendSize;
+    Graphics::Size* _menuSize;
+    Graphics::Point* _menuOrigin;
 };
 
 } // namespace State
