@@ -62,21 +62,35 @@ Image* Menu::createBackground(std::string bgImage)
 {
     Image* background = new Image(bgImage);
     // Initalise size & position pointers
-    _menuSize   = &background->size();
-    _menuOrigin = &background->position();
+    _menuSize   = background->size();
+    _menuOrigin = background->position();
     return background;
 }
 
 // Returns a label using this state's current font & colour
 TextArea* Menu::createLabel(const Point& origin,
                             const std::string text,
-                            const TextArea::HorizontalAlign alignment) const
+                            const TextArea::VerticalAlign vAlign,
+                            const TextArea::HorizontalAlign hAlign) const
 {
-    
+    TextArea *label = createLabel(origin, text);
+    label->setVerticalAlign(vAlign);
+    label->setHorizontalAlign(hAlign);
+    return label;
+}
+
+// Returns a label using this state's current font & colour
+TextArea* Menu::createLabel(const Point& origin, const std::string text) const
+{
     TextArea *label = new TextArea(text, origin);
     label->setFont(_font, _txtColour);
-    label->setHorizontalAlign(alignment);
     return label;
+}
+
+// Returns a label using this state's current font & colour
+TextArea* Menu::createCentredLabel(const Point& origin, const std::string text) const
+{
+    return createLabel(origin, text, TextArea::VerticalAlign::CENTER, TextArea::HorizontalAlign::CENTER);
 }
 
 // Returns a button with a linked event handler
@@ -90,17 +104,17 @@ ImageButton* Menu::createButton(const Point& origin,
 }
 
 // Creates a button with a centred label and adds it to the UI
-void Menu::createLabelledButton(const Point& origin,
-                                const Point labelOffset,
+void Menu::createLabelledButton(const Point &origin,
+                                const Point &labelOffset,
                                 const std::string text,
                                 const ImageButton::Type type,
                                 const std::function<void(Event::Mouse*)> onClick)
 {
-    auto button = createButton(origin, type, onClick);
+    ImageButton* button = createButton(origin, type, onClick);
     // Offset the label's origin so it appears inside the button
-    auto label = createLabel(origin + labelOffset, text, TextArea::HorizontalAlign::CENTER);
+    TextArea* label = createCentredLabel(origin + labelOffset, text);
     // Button width - 2 so it's always at least 1px inside the button's borders.
-    label->setWidth(button->size().width() - 2);
+    label->setSize(button->size() - 4);
 
     addUI(button);
     addUI(label);
@@ -109,23 +123,19 @@ void Menu::createLabelledButton(const Point& origin,
 /* Creates a number of labelled buttons using text extracted from the game's master.dat.
  * This can be used for any menu providing the buttons are equally spaced and the label
  * text is sorted sequentially when extracted from the .dat */ 
-void createLabelledButtons(const Point &origin,
-                           const Point &labelOffset,
-                           const int buttonCount,
-                           const MSG_TYPE msgType,
-                           const unsigned msgTxtStartingIndex,
-                           const int vertOffset,
-                           const ImageButton::Type btnType,
-                           const std::function<void(Event::Mouse*)> onClick)
+void Menu::createLabelledButtons(const Point &origin,
+                                 const Point &labelOffset,
+                                 const int buttonCount,
+                                 const MSG_TYPE msgType,
+                                 const unsigned msgTxtStartingIndex,
+                                 const int vertOffset,
+                                 const ImageButton::Type btnType,
+                                 const std::function<void(Event::Mouse*)> onClick)
 {
     for (int i = 0; i < buttonCount; i++)
     {
-        createLabelledButton(
-            Point(origin->x, origin->y + (vertOffset * i)), // origin
-            labelOffset, // label offset
-            _t(msgType, (msgTxtStartingIndex + i)), // text
-            btnType, // button sprite
-            onClick); // click event
+        createLabelledButton(Point(origin.x(), origin.y() + (vertOffset * i)),
+            labelOffset, _t(msgType, (msgTxtStartingIndex + i)), btnType, onClick);
     }
 }
 

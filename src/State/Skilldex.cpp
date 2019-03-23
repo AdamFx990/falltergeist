@@ -110,28 +110,30 @@ void Skilldex::init()
 
     setModal(true);
     setFullscreen(false);
+    // Initalise the skilldex background and position.
+    setPosition();
 
     // Initalise skills UI
-    initSkillButtons(_origin->x + 14, _origin->y + 44);
-    initSkillCounters(_origin->x + 111, _origin->y + 48);
+    initSkillButtons(_origin.x() + 14, _origin.y() + 44);
+    initSkillCounters(_origin.x() + 111, _origin.y() + 48);
     // Initalise the title label (MSG_SKILLDEX, 100)
-    auto title = createLabel(Point(_origin->x + 56, _origin->y + 14),
-        "Skilldex", TextArea::HorizontalAlign::CENTER);
+    auto title = createCentredLabel(
+        Point(_origin.x() + 56, _origin.y() + 14), "Skilldex");
     title->setWidth(76);
     addUI(title);
     // Initalise the cancel button
-    addUI(createButton(Point(_origin->x + 48, _origin->y + 338), ImageButton
+    addUI(createButton(Point(_origin.x() + 48, _origin.y() + 338), ImageButton
         ::Type::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)));
     // Label the cancel button (MSG_SKILLDEX, 101)
-    addUI(createLabel(Point(_origin->x + 70, _origin->y + 337),
-        "Cancel", TextArea::HorizontalAlign::LEFT));
+    addUI(createLabel(Point(_origin.x() + 70, _origin.y() + 337), "Cancel",
+        TextArea::VerticalAlign::CENTER, TextArea::HorizontalAlign::LEFT));
 }
 
-// Calculate the origin on the skilldex
+// Calculate the origin on the skilldex and add the background image
 void Skilldex::setPosition()
 {
     // Initalise background
-    auto rendSize = Game::getInstance()->renderer()->size();
+    auto rendSize   = Game::getInstance()->renderer()->size();
     auto background = createBackground("art/intrface/skldxbox.frm");    
     // calculate the origin of the background
     const int x = (rendSize.width() + 640 - 2 * background->size().width()) / 2;

@@ -64,16 +64,6 @@ int Size::height() const
     return _height;
 }
 
-/*int& Size::rwidth()
-{
-    return _width;
-}
-
-int& Size::rheight()
-{
-    return _height;
-}*/
-
 void Size::setWidth(int width)
 {
     if (width < 0)
@@ -130,9 +120,23 @@ bool Size::operator !=(const Size& rhs) const
     return !(*this == rhs);
 }
 
+Size operator +(Size lhs, int rhs)
+{
+    lhs.setWidth (lhs.width()  + rhs);
+    lhs.setHeight(lhs.height() + rhs);
+    return lhs;
+}
+
 Size operator +(Size lhs, const Size& rhs)
 {
     lhs += rhs;
+    return lhs;
+}
+
+Size operator -(Size lhs, int rhs)
+{
+    lhs.setWidth (lhs.width()  - rhs);
+    lhs.setHeight(lhs.height() - rhs);
     return lhs;
 }
 
@@ -154,9 +158,19 @@ Size operator /(Size lhs, double rhs)
     return lhs;
 }
 
+Size Size::add(int rhs) const
+{
+    return *this + rhs;
+}
+
 Size Size::add(const Size& rhs) const
 {
     return *this + rhs;
+}
+
+Size Size::sub(int rhs) const
+{
+    return *this - rhs;
 }
 
 Size Size::sub(const Size& rhs) const
@@ -174,5 +188,5 @@ Size Size::div(double rhs) const
     return *this / rhs;
 }
 
-}
-}
+} // Graphics
+} // Falltergeist

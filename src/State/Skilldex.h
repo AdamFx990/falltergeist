@@ -61,7 +61,7 @@ private:
     // Array of skill names used for labels
     std::string _skillText[8];
 
-    const Point* _origin;
+    Point _origin;
     
     SKILL skillByIndex(int i) const;
     
@@ -73,6 +73,7 @@ private:
     void initSkillCounters(const int x, const int y);
 };
 
-}
-}
+} // State
+} // Falltergeist
+
 #endif // FALLTERGEIST_STATE_SKILLDEX_H

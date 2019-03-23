@@ -66,13 +66,19 @@ public:
     bool operator ==(const Size& rhs) const;
     bool operator !=(const Size& rhs) const;
 
+    friend Size operator +(Size lhs, int rhs);
+    friend Size operator -(Size lhs, int rhs);
     friend Size operator +(Size lhs, const Size& rhs);
     friend Size operator -(Size lhs, const Size& rhs);
     friend Size operator *(Size lhs, double rhs);
     friend Size operator /(Size lhs, double rhs);
 
+    // Addition of an int
+    Size add(int rhs) const;
     // Addition of another Size
     Size add(const Size& rhs) const;
+    // Subtraction of an int
+    Size sub(int rhs) const;
     // Subtraction of another Size
     Size sub(const Size& rhs) const;
     // Multiplication of width/height by given number

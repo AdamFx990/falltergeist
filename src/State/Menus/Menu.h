@@ -31,6 +31,7 @@
 #include "../../Event/Mouse.h"
 #include "../../Base/Delegate.h"
 #include "../../Game/Game.h"
+#include "../../functions.h"
 
 // Third party includes
 
@@ -56,8 +57,12 @@ public:
     Image* createBackground(std::string bgImage);
 
     TextArea* createLabel(const Point &origin,
+                          const std::string text) const;
+    TextArea* createLabel(const Point &origin,
                           const std::string text,
-                          const TextArea::HorizontalAlign alignment) const;
+                          const TextArea::VerticalAlign vAlign,
+                          const TextArea::HorizontalAlign hAlign) const;
+    TextArea* createCentredLabel(const Point &origin, const std::string text) const;
 
     ImageButton* createButton(const Point &origin,
                               const ImageButton::Type type,
@@ -82,8 +87,8 @@ private:
     SDL_Color _txtColour;
     std::string _font;
     Graphics::Size _rendSize;
-    Graphics::Size* _menuSize;
-    Graphics::Point* _menuOrigin;
+    Graphics::Size _menuSize;
+    Graphics::Point _menuOrigin;
 };
 
 } // namespace State
