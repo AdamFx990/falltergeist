@@ -18,23 +18,23 @@
  */
 
 // Related headers
-#include "../State/Skilldex.h"
+#include "../../State/Menus/Skilldex.h"
 
 // C++ standard includes
 
 // Falltergeist includes
-#include "../functions.h"
-#include "../Game/DudeObject.h"
-#include "../Game/Game.h"
-#include "../Graphics/Point.h"
-#include "../Graphics/Renderer.h"
-#include "../Input/Mouse.h"
-#include "../Logger.h"
-#include "../ResourceManager.h"
-#include "../State/ExitConfirm.h"
-#include "../State/Location.h"
-#include "../State/SettingsMenu.h"
-#include "../UI/Image.h"
+#include "../../functions.h"
+#include "../../Game/DudeObject.h"
+#include "../../Game/Game.h"
+#include "../../Graphics/Point.h"
+#include "../../Graphics/Renderer.h"
+#include "../../Input/Mouse.h"
+#include "../../Logger.h"
+#include "../../ResourceManager.h"
+#include "../../State/ExitConfirm.h"
+#include "../../State/Location.h"
+#include "../../State/SettingsMenu.h"
+#include "../../UI/Image.h"
 
 // Third party includes
 
@@ -117,7 +117,7 @@ void Skilldex::init()
     initSkillButtons(_origin.x() + 14, _origin.y() + 44);
     initSkillCounters(_origin.x() + 111, _origin.y() + 48);
     // Initalise the title label (MSG_SKILLDEX, 100)
-    auto title = createCentredLabel(
+    TextArea* title = createCentredLabel(
         Point(_origin.x() + 56, _origin.y() + 14), "Skilldex");
     title->setWidth(76);
     addUI(title);

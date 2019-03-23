@@ -23,12 +23,12 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../Format/Enums.h"
-#include "../State/State.h"
-#include "../State/Menus/Menu.h"
-#include "../UI/ImageButton.h"
-#include "../UI/TextArea.h"
-#include "../UI/BigCounter.h"
+#include "../../Format/Enums.h"
+#include "../../State/State.h"
+#include "../../State/Menus/Menu.h"
+#include "../../UI/ImageButton.h"
+#include "../../UI/TextArea.h"
+#include "../../UI/BigCounter.h"
 
 // Third party includes
 
