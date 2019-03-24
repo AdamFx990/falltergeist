@@ -29,7 +29,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/Location.h"
-#include "../State/MainMenu.h"
+#include "../State/Menus/MainMenu.h"
 #include "../UI/Image.h"
 #include "../UI/ImageButton.h"
 #include "../UI/PlayerPanel.h"

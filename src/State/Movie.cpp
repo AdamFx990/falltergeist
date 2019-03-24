@@ -37,7 +37,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
-#include "../State/MainMenu.h"
+#include "../State/Menus/MainMenu.h"
 #include "../UI/MvePlayer.h"
 #include "../UI/TextArea.h"
 

@@ -37,7 +37,7 @@
 #include "../Settings.h"
 #include "../State/CritterDialog.h"
 #include "../State/Location.h"
-#include "../State/MainMenu.h"
+#include "../State/Menus/MainMenu.h"
 #include "../State/Movie.h"
 #include "../State/SettingsMenu.h"
 #include "../UI/Image.h"

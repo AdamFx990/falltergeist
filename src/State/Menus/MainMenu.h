@@ -17,18 +17,14 @@
  * along with Falltergeist.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FALLTERGEIST_STATE_SKILLDEX_H
-#define FALLTERGEIST_STATE_SKILLDEX_H
+#ifndef FALLTERGEIST_STATE_MAINMENU_H
+#define FALLTERGEIST_STATE_MAINMENU_H
 
 // C++ standard includes
+#include <memory>
 
 // Falltergeist includes
-#include "../../Format/Enums.h"
-#include "../../State/State.h"
 #include "../../State/Menus/Menu.h"
-#include "../../UI/ImageButton.h"
-#include "../../UI/TextArea.h"
-#include "../../UI/BigCounter.h"
 
 // Third party includes
 
@@ -37,41 +33,41 @@ namespace Falltergeist
 namespace State
 {
 
-class Skilldex : public Menu
+class MainMenu : public Menu
 {
 public:
-    Skilldex();
-    ~Skilldex() override;
+    MainMenu();
+    ~MainMenu() override;
 
     void init() override;
 
-    void setPosition() override;
-
-    void onKeyDown(Event::Keyboard* event) override;
     void onStateActivate(Event::State* event) override;
-
-    void onCancelButtonClick();
-    void onSkillButtonClick(SKILL skill);
+    void onKeyDown(Event::Keyboard* event) override;
 
 private:
-    // The number of skills in the skilldex
-    static const int _skillCount = 8;
-    // Vertical offset modifier for UI elements
-    static const int _vertMod = 36;
+    // The total number of menu items
+    const int _entryCount = 6;
 
-    Point _origin;
-    
-    SKILL skillByIndex(const int i) const;
-    
-    // Initalise a skilldex counter
-    inline UI::BigCounter* initCounter(const int x, const int y) const
-    { return new UI::BigCounter(x, y, 3); }
+    void onButtonClick(const int i);
 
-    void initSkillButtons (const int x, const int y);
-    void initSkillCounters(const int x, const int y);
+    void onExitButtonClick(Event::Mouse* event);
+    void onNewGameButtonClick(Event::Mouse* event);
+    void onSettingsButtonClick(Event::Mouse* event);
+    void doExit();
+    void doNewGame();
+    void doLoadGame();
+    void doSettings();
+    void doIntro();
+    void doCredits();
+
+    void onExitStart(Event::State* event);
+    void onNewGameStart(Event::State* event);
+    void onLoadGameStart(Event::State* event);
+    void onIntroStart(Event::State* event);
+    void onCreditsStart(Event::State* event);
 };
 
 } // State
 } // Falltergeist
 
-#endif // FALLTERGEIST_STATE_SKILLDEX_H
+#endif // FALLTERGEIST_STATE_MAINMENU_H

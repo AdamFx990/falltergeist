@@ -46,19 +46,12 @@ namespace State
 using namespace UI;
 
 // ctor
-Skilldex::Skilldex() : Menu()
-{
-    // Get skill names from fallout data files
-    for(int i = 0; i < _skillCount; i++)
-    {
-        _skillText[i] =  _t(MSG_SKILLDEX, i + 102);
-    }
-}
+Skilldex::Skilldex() : Menu() {}
 // dtor
 Skilldex::~Skilldex() {}
 
 // Returns a skill based on where it appears in the skilldex
-SKILL Skilldex::skillByIndex(int i) const
+SKILL Skilldex::skillByIndex(const int i) const
 {
     switch (i)
     {
@@ -77,16 +70,25 @@ SKILL Skilldex::skillByIndex(int i) const
 // Initalises all skills' buttons and their labels
 void Skilldex::initSkillButtons(const int x, const int y)
 {
-    // Offset applied to the labels' origin
-    const Point labelOffset(3, 8);
-    // The texture the buttons will use
+    const Point lblOffset(3, 8);
     const ImageButton::Type btnType = ImageButton::Type::SKILLDEX;
-
+    
+    // Array of skill names used for labels
+    const char* text[] = {
+        "SNEAK",
+        "LOCKPICK",
+        "STEAL",
+        "TRAPS",
+        "FIRST AID",
+        "DOCTOR",
+        "SCIENCE",
+        "REPAIR"
+    };
     for (int i = 0; i < _skillCount; i++)
     {
-        createLabelledButton(Point(x, y + (_vertMod * i)),
-            labelOffset, _skillText[i], btnType, std::bind(
-                &Skilldex::onSkillButtonClick, this, skillByIndex(i)));
+        const Point pos = Point(x, y + (_vertMod * i));
+        const auto event = std::bind(&Skilldex::onSkillButtonClick, this, skillByIndex(i));
+        createLabelledButton(pos, lblOffset, text[i], btnType, event);
     }
 }
 

@@ -120,9 +120,26 @@ void Menu::createLabelledButton(const Point &origin,
     addUI(label);
 }
 
-/* Creates a number of labelled buttons using text extracted from the game's master.dat.
- * This can be used for any menu providing the buttons are equally spaced and the label
- * text is sorted sequentially when extracted from the .dat */ 
+// Creates a button with a centred label and adds it to the UI
+void Menu::createLabelledButton(const Point &origin,
+                                const Point &labelOffset,
+                                const int labelWidth,
+                                const std::string text,
+                                const ImageButton::Type type,
+                                const std::function<void(Event::Mouse*)> onClick)
+{
+    ImageButton* button = createButton(origin, type, onClick);
+    // Offset the label's origin so it appears inside the button
+    TextArea* label = createCentredLabel(origin + labelOffset, text);
+    label->setWidth(labelWidth);
+
+    addUI(button);
+    addUI(label);
+}
+
+/* Creates a number of labelled buttons using text extracted from the game's master.dat. *
+ * This can be used for any menu providing the buttons are equally spaced and the label  *
+ * text is sorted sequentially when extracted from the .dat                              */ 
 void Menu::createLabelledButtons(const Point &origin,
                                  const Point &labelOffset,
                                  const int buttonCount,

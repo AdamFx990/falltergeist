@@ -73,6 +73,12 @@ public:
                               const std::string text,
                               const ImageButton::Type type,
                               const std::function<void(Event::Mouse*)> onClick);
+    void createLabelledButton(const Point &origin,
+                              const Point &labelOffset,
+                              const int labelWidth,
+                              const std::string text,
+                              const ImageButton::Type type,
+                              const std::function<void(Event::Mouse*)> onClick);
 
     void createLabelledButtons(const Point &origin,
                                const Point &labelOffset,
