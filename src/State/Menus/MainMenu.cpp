@@ -73,8 +73,8 @@ void MainMenu::init()
     addUI("background", createBackground("art/intrface/mainmenu.frm"));
     setFont("font4.aaf", { 0xb8, 0x9c, 0x28, 0xff });
     // Constants for UI elements
+    const int vertMod = 41;
     const int lblWidth = 150;
-    const int vertOffset = 41;
     const Point origin(30, 19);
     const Point lblOffset(20, 1);
     const ImageButton::Type btnType = ImageButton::Type::MENU_RED_CIRCLE;
@@ -89,7 +89,7 @@ void MainMenu::init()
     // Initalise Menu buttons and text
     for (int i = 0; i < _entryCount; i++)
     {
-        const Point pos = Point(origin.x(), origin.y() + vertOffset * i);
+        const Point pos = Point(origin.x(), origin.y() + vertMod * i);
         const auto event = std::bind(&MainMenu::onButtonClick, this, i);
         createLabelledButton(pos, lblOffset, lblWidth, text[i], btnType, event);
     }

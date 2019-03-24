@@ -87,7 +87,7 @@ void Skilldex::initSkillButtons(const int x, const int y)
     for (int i = 0; i < _skillCount; i++)
     {
         const Point pos = Point(x, y + (_vertMod * i));
-        const auto event = std::bind(&Skilldex::onSkillButtonClick, this, skillByIndex(i));
+        const auto event = std::bind(&Skilldex::onButtonClick, this, skillByIndex(i));
         createLabelledButton(pos, lblOffset, text[i], btnType, event);
     }
 }
@@ -163,7 +163,7 @@ void Skilldex::onStateActivate(Event::State* event)
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
-void Skilldex::onSkillButtonClick(SKILL skill)
+void Skilldex::onButtonClick(SKILL skill)
 {
     Game::getInstance()->locationState()->setSkillInUse(skill);
     auto mouse = Game::getInstance()->mouse();

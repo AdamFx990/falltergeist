@@ -50,9 +50,6 @@ public:
     void onKeyDown(Event::Keyboard* event) override;
     void onStateActivate(Event::State* event) override;
 
-    void onCancelButtonClick();
-    void onSkillButtonClick(SKILL skill);
-
 private:
     // The number of skills in the skilldex
     static const int _skillCount = 8;
@@ -69,6 +66,9 @@ private:
 
     void initSkillButtons (const int x, const int y);
     void initSkillCounters(const int x, const int y);
+
+    void onCancelButtonClick();
+    void onButtonClick(SKILL skill);
 };
 
 } // State
