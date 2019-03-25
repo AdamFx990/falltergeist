@@ -33,6 +33,7 @@ namespace Falltergeist
 {
 namespace State
 {
+
 // ctor
 Menu::Menu() : State()
 {
@@ -64,18 +65,24 @@ Image* Menu::createBackground(std::string bgImage)
     // Initalise size & position pointers
     _menuSize   = background->size();
     _menuOrigin = background->position();
+
     return background;
 }
+
+// ====== //
+// Labels //
+// ====== //
 
 // Returns a label using this state's current font & colour
 TextArea* Menu::createLabel(const Point& origin,
                             const std::string text,
-                            const TextArea::VerticalAlign vAlign,
-                            const TextArea::HorizontalAlign hAlign) const
+                            const TextArea::VerticalAlign va,
+                            const TextArea::HorizontalAlign ha) const
 {
     TextArea *label = createLabel(origin, text);
-    label->setVerticalAlign(vAlign);
-    label->setHorizontalAlign(hAlign);
+    label->setVerticalAlign  (va);
+    label->setHorizontalAlign(ha);
+
     return label;
 }
 
@@ -84,22 +91,22 @@ TextArea* Menu::createLabel(const Point& origin, const std::string text) const
 {
     TextArea *label = new TextArea(text, origin);
     label->setFont(_font, _txtColour);
+   
     return label;
 }
 
-// Returns a label using this state's current font & colour
-TextArea* Menu::createCentredLabel(const Point& origin, const std::string text) const
-{
-    return createLabel(origin, text, TextArea::VerticalAlign::CENTER, TextArea::HorizontalAlign::CENTER);
-}
+// ======= //
+// Buttons //
+// ======= //
 
 // Returns a button with a linked event handler
 ImageButton* Menu::createButton(const Point& origin,
-                                const ImageButton::Type type,
+                                const ImageButton::Type btnType,
                                 const std::function<void(Event::Mouse*)> onClick) const
 {
-    ImageButton *button = new ImageButton(type, origin);
+    ImageButton *button = new ImageButton(btnType, origin);
     button->mouseClickHandler().add(onClick);
+
     return button;
 }
 
@@ -107,12 +114,15 @@ ImageButton* Menu::createButton(const Point& origin,
 void Menu::createLabelledButton(const Point &origin,
                                 const Point &labelOffset,
                                 const std::string text,
-                                const ImageButton::Type type,
+                                const ImageButton::Type btnType,
                                 const std::function<void(Event::Mouse*)> onClick)
 {
-    ImageButton* button = createButton(origin, type, onClick);
+    const auto va = TextArea::VerticalAlign::CENTER;
+    const auto ha = TextArea::HorizontalAlign::CENTER;
+    // Create a button at the origin
+    ImageButton* button = createButton(origin, btnType, onClick);
     // Offset the label's origin so it appears inside the button
-    TextArea* label = createCentredLabel(origin + labelOffset, text);
+    TextArea* label = createLabel(origin + labelOffset, text, va, ha);
     // Button width - 2 so it's always at least 1px inside the button's borders.
     label->setSize(button->size() - 4);
 
@@ -125,35 +135,20 @@ void Menu::createLabelledButton(const Point &origin,
                                 const Point &labelOffset,
                                 const int labelWidth,
                                 const std::string text,
-                                const ImageButton::Type type,
+                                const ImageButton::Type btnType,
                                 const std::function<void(Event::Mouse*)> onClick)
 {
-    ImageButton* button = createButton(origin, type, onClick);
+    const auto va = TextArea::VerticalAlign::CENTER;
+    const auto ha = TextArea::HorizontalAlign::CENTER;
+    // Create a button at the origin
+    ImageButton* button = createButton(origin, btnType, onClick);
     // Offset the label's origin so it appears inside the button
-    TextArea* label = createCentredLabel(origin + labelOffset, text);
+    TextArea* label = createLabel(origin + labelOffset, text, va, ha);
+    // Set label to the specified width (usually when the button is a red circle).
     label->setWidth(labelWidth);
 
     addUI(button);
     addUI(label);
-}
-
-/* Creates a number of labelled buttons using text extracted from the game's master.dat. *
- * This can be used for any menu providing the buttons are equally spaced and the label  *
- * text is sorted sequentially when extracted from the .dat                              */ 
-void Menu::createLabelledButtons(const Point &origin,
-                                 const Point &labelOffset,
-                                 const int buttonCount,
-                                 const MSG_TYPE msgType,
-                                 const unsigned msgTxtStartingIndex,
-                                 const int vertOffset,
-                                 const ImageButton::Type btnType,
-                                 const std::function<void(Event::Mouse*)> onClick)
-{
-    for (int i = 0; i < buttonCount; i++)
-    {
-        createLabelledButton(Point(origin.x(), origin.y() + (vertOffset * i)),
-            labelOffset, _t(msgType, (msgTxtStartingIndex + i)), btnType, onClick);
-    }
 }
 
 } // namespace State

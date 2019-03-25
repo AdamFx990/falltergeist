@@ -55,39 +55,35 @@ public:
     virtual void setPosition();
 
     Image* createBackground(std::string bgImage);
-
+    // ====== //
+    // Labels //
+    // ====== //
     TextArea* createLabel(const Point &origin,
                           const std::string text) const;
+    
     TextArea* createLabel(const Point &origin,
                           const std::string text,
-                          const TextArea::VerticalAlign vAlign,
-                          const TextArea::HorizontalAlign hAlign) const;
-    TextArea* createCentredLabel(const Point &origin, const std::string text) const;
-
+                          const TextArea::VerticalAlign va,
+                          const TextArea::HorizontalAlign ha) const;
+    // ======= //
+    // Buttons //
+    // ======= //
     ImageButton* createButton(const Point &origin,
-                              const ImageButton::Type type,
+                              const ImageButton::Type btnType,
                               const std::function<void(Event::Mouse*)> onClick) const;
 
     void createLabelledButton(const Point &origin,
                               const Point &labelOffset,
                               const std::string text,
-                              const ImageButton::Type type,
+                              const ImageButton::Type btnType,
                               const std::function<void(Event::Mouse*)> onClick);
+
     void createLabelledButton(const Point &origin,
                               const Point &labelOffset,
                               const int labelWidth,
                               const std::string text,
-                              const ImageButton::Type type,
+                              const ImageButton::Type btnType,
                               const std::function<void(Event::Mouse*)> onClick);
-
-    void createLabelledButtons(const Point &origin,
-                               const Point &labelOffset,
-                               const int buttonCount,
-                               const MSG_TYPE msgType,
-                               const unsigned msgTxtStartingIndex,
-                               const int vertOffset,
-                               const ImageButton::Type type,
-                               const std::function<void(Event::Mouse*)> onClick);
 
 private:
     SDL_Color _txtColour;

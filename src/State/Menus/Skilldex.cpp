@@ -72,23 +72,13 @@ void Skilldex::initSkillButtons(const int x, const int y)
 {
     const Point lblOffset(3, 8);
     const ImageButton::Type btnType = ImageButton::Type::SKILLDEX;
-    
-    // Array of skill names used for labels
-    const char* text[] = {
-        "SNEAK",
-        "LOCKPICK",
-        "STEAL",
-        "TRAPS",
-        "FIRST AID",
-        "DOCTOR",
-        "SCIENCE",
-        "REPAIR"
-    };
     for (int i = 0; i < _skillCount; i++)
     {
         const Point pos = Point(x, y + (_vertMod * i));
+        const std::string text = _t(MSG_TYPE::MSG_SKILLDEX, 102 + i);
         const auto event = std::bind(&Skilldex::onButtonClick, this, skillByIndex(i));
-        createLabelledButton(pos, lblOffset, text[i], btnType, event);
+
+        createLabelledButton(pos, lblOffset, text, btnType, event);
     }
 }
 
@@ -116,19 +106,27 @@ void Skilldex::init()
     setPosition();
 
     // Initalise skills UI
-    initSkillButtons(_origin.x() + 14, _origin.y() + 44);
+    initSkillButtons (_origin.x() + 14 , _origin.y() + 44);
     initSkillCounters(_origin.x() + 111, _origin.y() + 48);
-    // Initalise the title label (MSG_SKILLDEX, 100)
-    TextArea* title = createCentredLabel(
-        Point(_origin.x() + 56, _origin.y() + 14), "Skilldex");
+    
+    // Initalise the title label
+    std::string text = _t(MSG_TYPE::MSG_SKILLDEX, 100); // "Skilldex"
+    Point pos = Point(_origin.x() + 56, _origin.y() + 14);
+    TextArea* title = createLabel(pos, text);
     title->setWidth(76);
     addUI(title);
+
     // Initalise the cancel button
-    addUI(createButton(Point(_origin.x() + 48, _origin.y() + 338), ImageButton
-        ::Type::SMALL_RED_CIRCLE, std::bind(&Skilldex::onCancelButtonClick, this)));
+    pos = Point(_origin.x() + 48, _origin.y() + 338);
+    const auto btnType = ImageButton::Type::SMALL_RED_CIRCLE;
+    const auto event = std::bind(&Skilldex::onCancelButtonClick, this);
+    addUI(createButton(pos, btnType, event));
     // Label the cancel button (MSG_SKILLDEX, 101)
-    addUI(createLabel(Point(_origin.x() + 70, _origin.y() + 337), "Cancel",
-        TextArea::VerticalAlign::CENTER, TextArea::HorizontalAlign::LEFT));
+    text = _t(MSG_TYPE::MSG_SKILLDEX, 101); // "Cancel"
+    pos = Point(_origin.x() + 70, _origin.y() + 337);
+    const auto va = TextArea::VerticalAlign::CENTER;
+    const auto ha = TextArea::HorizontalAlign::LEFT;
+    addUI(createLabel(pos, text, va, ha));
 }
 
 // Calculate the origin on the skilldex and add the background image
