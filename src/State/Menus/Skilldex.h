@@ -43,6 +43,7 @@ public:
     Skilldex();
     ~Skilldex() override;
 
+protected:
     void init() override;
 
     void setPosition() override;

@@ -77,12 +77,12 @@ void MainMenu::init()
     const int lblWidth = 150;
     const Point origin(30, 19);
     const Point lblOffset(20, 1);
-    const ImageButton::Type btnType = ImageButton::Type::MENU_RED_CIRCLE;
+    const auto btnType = ImageButton::Type::MENU_RED_CIRCLE;
     const char* text[] = { 
         "INTRO",
         "NEW GAME",
         "LOAD GAME",
-        "SETTINGS",
+        "OPTIONS",
         "CREDITS",
         "EXIT"
     };
@@ -98,8 +98,8 @@ void MainMenu::init()
 void MainMenu::onStateActivate(Event::State* event)
 {
     Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
-    Game::getInstance()->mixer()->playACMMusic("07desert.acm",true);
-    Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+    Game::getInstance()->mixer()->playACMMusic("07desert.acm", true);
+    Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
 }
 
 // Triggers an event for the button that is clicked
@@ -111,16 +111,16 @@ void MainMenu::onButtonClick(const int i)
             doIntro();
             break;
         case 1:
-            doNewGame();
+            pushState(new NewGame());
             break;
         case 2:
-            doLoadGame();
+            pushState(new LoadGame());
             break;
         case 3:
-            doSettings();
+            pushState(new SettingsMenu());
             break;
         case 4:
-            doCredits();
+            pushState(new Credits());
             break;
         case 5:
             doExit();
@@ -137,16 +137,16 @@ void MainMenu::onKeyDown(Event::Keyboard* event)
             doIntro();
             break;  
         case SDLK_n: // N
-            doNewGame();
+            pushState(new NewGame());
             break;
         case SDLK_l: // L
-            doLoadGame();
+            pushState(new LoadGame());
             break;
         case SDLK_o: // O
-            doSettings();
+            Game::getInstance()->pushState(new SettingsMenu());
             break;
         case SDLK_c: // C
-            doCredits();
+            pushState(new Credits());
             break;
         case SDLK_e: // E
         case SDLK_ESCAPE:
@@ -155,77 +155,18 @@ void MainMenu::onKeyDown(Event::Keyboard* event)
     }
 }
 
-void MainMenu::doExit()
-{
-    fadeDoneHandler().clear();
-    fadeDoneHandler().add([this](Event::Event* event){ this->onExitStart(dynamic_cast<Event::State*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
-}
-
-void MainMenu::doNewGame()
-{
-    fadeDoneHandler().clear();
-    fadeDoneHandler().add([this](Event::Event* event){ this->onNewGameStart(dynamic_cast<Event::State*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
-}
-
-void MainMenu::doLoadGame()
-{
-    fadeDoneHandler().clear();
-    fadeDoneHandler().add([this](Event::Event* event){ this->onLoadGameStart(dynamic_cast<Event::State*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
-}
-
-void MainMenu::doSettings()
-{
-    Game::getInstance()->pushState(new SettingsMenu());
-}
-
-void MainMenu::doIntro()
-{
-    fadeDoneHandler().clear();
-    fadeDoneHandler().add([this](Event::Event* event){ this->onIntroStart(dynamic_cast<Event::State*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
-}
-
-void MainMenu::doCredits()
-{
-    fadeDoneHandler().clear();
-    fadeDoneHandler().add([this](Event::Event* event){ this->onCreditsStart(dynamic_cast<Event::State*>(event)); });
-    Game::getInstance()->renderer()->fadeOut(0,0,0,1000);
-}
-
-
-void MainMenu::onExitStart(Event::State* event)
-{
-    fadeDoneHandler().clear();
-    Game::getInstance()->mixer()->stopMusic();
-    Game::getInstance()->quit();
-}
-
-void MainMenu::onNewGameStart(Event::State* event)
-{
-    fadeDoneHandler().clear();
-    Game::getInstance()->pushState(new NewGame());
-}
-
-void MainMenu::onLoadGameStart(Event::State* event)
-{
-    fadeDoneHandler().clear();
-    Game::getInstance()->pushState(new LoadGame());
-}
-
-void MainMenu::onIntroStart(Event::State* event)
+void MainMenu::onIntro()
 {
     fadeDoneHandler().clear();
     Game::getInstance()->pushState(new Movie(17));
     Game::getInstance()->pushState(new Movie(1));
 }
 
-void MainMenu::onCreditsStart(Event::State* event)
+void MainMenu::onExit()
 {
     fadeDoneHandler().clear();
-    Game::getInstance()->pushState(new Credits());
+    Game::getInstance()->mixer()->stopMusic();
+    Game::getInstance()->quit();
 }
 
 } // State

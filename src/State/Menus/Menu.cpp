@@ -22,6 +22,7 @@
 
 // C++ standard includes
 #include <string>
+#include <thread>
 
 // Falltergeist includes
 #include "../../Game/Game.h"
@@ -46,17 +47,24 @@ Menu::Menu() : State()
 // dtor
 Menu::~Menu() {}
 
+// ====== //
+// States //
+// ====== //
+
+void Menu::pushState(State* state)
+{
+    fadeDoneHandler().clear();
+    Game::getInstance()->pushState(state);
+}
+
+// ========== //
+// Background //
+// ========== //
+
 // Recalculate the menu's position
 void Menu::setPosition()
 {
     State::setPosition((_rendSize - Point(640, 480)) / 2);
-}
-
-// Set the font & colour used by labels & labelled buttons
-void Menu::setFont(const std::string font, const SDL_Colour colour)
-{
-    _font = font;
-    _txtColour = colour;
 }
 
 Image* Menu::createBackground(std::string bgImage)
@@ -72,6 +80,13 @@ Image* Menu::createBackground(std::string bgImage)
 // ====== //
 // Labels //
 // ====== //
+
+// Set the font & colour used by labels & labelled buttons
+void Menu::setFont(const std::string font, const SDL_Colour colour)
+{
+    _font = font;
+    _txtColour = colour;
+}
 
 // Returns a label using this state's current font & colour
 TextArea* Menu::createLabel(const Point& origin,
@@ -149,6 +164,40 @@ void Menu::createLabelledButton(const Point &origin,
 
     addUI(button);
     addUI(label);
+}
+
+// ===== //
+// Fades //
+// ===== //
+
+// Fade in for state push
+void Menu::fadeInFor(const std::function<void(Event::State*)> event)
+{
+    fadeInit(event);
+    fadeIn();
+}
+
+// Fade out for state pop
+void Menu::fadeOutFor(const std::function<void(Event::State*)> event)
+{
+    fadeInit(event);
+    fadeOut();
+}
+
+void Menu::fadeInit(const std::function<void(Event::State*)> event)
+{
+    fadeDoneHandler().clear();
+    fadeDoneHandler().add(event);
+}
+
+void Menu::fadeIn() const
+{
+    Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
+}
+
+void Menu::fadeOut() const
+{
+    Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
 }
 
 } // namespace State

@@ -39,6 +39,7 @@ public:
     MainMenu();
     ~MainMenu() override;
 
+protected:
     void init() override;
 
     void onStateActivate(Event::State* event) override;
@@ -53,18 +54,14 @@ private:
     void onExitButtonClick(Event::Mouse* event);
     void onNewGameButtonClick(Event::Mouse* event);
     void onSettingsButtonClick(Event::Mouse* event);
-    void doExit();
-    void doNewGame();
-    void doLoadGame();
-    void doSettings();
-    void doIntro();
-    void doCredits();
 
-    void onExitStart(Event::State* event);
-    void onNewGameStart(Event::State* event);
-    void onLoadGameStart(Event::State* event);
-    void onIntroStart(Event::State* event);
-    void onCreditsStart(Event::State* event);
+    inline void doIntro()
+    { fadeOutFor(std::bind(&MainMenu::onIntro, this)); };
+    inline void doExit()
+    { fadeOutFor(std::bind(&MainMenu::onExit, this)); };
+
+    void onIntro();
+    void onExit();
 };
 
 } // State

@@ -46,18 +46,25 @@ class Menu : public State
 public:
     // ctor
     Menu();
-
+    // dtor
     virtual ~Menu() override;
 
-
-    virtual void setFont(const std::string font, const SDL_Colour colour);
-
+protected:
+    // ====== //
+    // States //
+    // ====== //
+    void pushState(State* state);
+    // ========== //
+    // Background //
+    // ========== //
     virtual void setPosition();
 
     Image* createBackground(std::string bgImage);
     // ====== //
     // Labels //
     // ====== //
+    virtual void setFont(const std::string font, const SDL_Colour colour);
+
     TextArea* createLabel(const Point &origin,
                           const std::string text) const;
     
@@ -84,6 +91,11 @@ public:
                               const std::string text,
                               const ImageButton::Type btnType,
                               const std::function<void(Event::Mouse*)> onClick);
+    // ===== //
+    // Fades //
+    // ===== //
+    void fadeInFor (const std::function<void(Event::State*)> event);
+    void fadeOutFor(const std::function<void(Event::State*)> event);
 
 private:
     SDL_Color _txtColour;
@@ -91,6 +103,11 @@ private:
     Graphics::Size _rendSize;
     Graphics::Size _menuSize;
     Graphics::Point _menuOrigin;
+
+    void fadeInit(const std::function<void(Event::State*)> event);
+    void fadeIn () const;
+    void fadeOut() const;
+
 };
 
 } // namespace State
