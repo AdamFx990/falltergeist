@@ -49,11 +49,13 @@ protected:
     void init() override;
 
     void doCancel();
-    void onCancelFadeDone(Event::State* event);
 
     void onStateActivate(Event::State* event) override;
     void onStateDeactivate(Event::State* event) override;
     void onKeyDown(Event::Keyboard* event) override;
+
+private:
+    bool _fromMainMenu;
 };
 
 } // State

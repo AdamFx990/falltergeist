@@ -47,7 +47,10 @@ namespace State
 {
 
 // ctor
-LoadGame::LoadGame() : Menu() {}
+LoadGame::LoadGame() : Menu() 
+{
+    _fromMainMenu = !Game::getInstance()->locationState();
+}
 // dtor
 LoadGame::~LoadGame() {}
 
@@ -85,28 +88,21 @@ void LoadGame::init()
 
 void LoadGame::doCancel()
 {
-    if (!Game::getInstance()->locationState())
+    if (_fromMainMenu)
     {
-        fadeDoneHandler().clear();
-        fadeDoneHandler().add([this](Event::Event* event){ this->onCancelFadeDone(dynamic_cast<Event::State*>(event)); });
-        Game::getInstance()->renderer()->fadeOut(255,255,255,1000);
+        // Fade out if loaded from main menu
+        fadeOutFor(std::bind(&LoadGame::popState, this), 255, 255, 255);
     }
-    else
+    else 
     {
-        Game::getInstance()->popState();
+        popState();
     }
-}
-
-void LoadGame::onCancelFadeDone(Event::State* event)
-{
-    fadeDoneHandler().clear();
-    Game::getInstance()->popState();
 }
 
 void LoadGame::onStateActivate(Event::State* event)
 {
-    if (!Game::getInstance()->locationState())
-        Game::getInstance()->renderer()->fadeIn(0,0,0,1000);
+    // Fade in if loaded from main menu
+    if (_fromMainMenu) fadeIn(0, 0, 0);
     Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
 }
 

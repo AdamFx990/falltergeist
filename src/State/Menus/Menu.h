@@ -102,24 +102,22 @@ protected:
     // ===== //
     // Fades //
     // ===== //
+    inline void fadeIn (const int r, const int g, const int b) const
+    { Game::getInstance()->renderer()->fadeIn (r, g, b, 1000); }
+    inline void fadeOut(const int r, const int g, const int b) const
+    { Game::getInstance()->renderer()->fadeOut(r, g, b, 1000); }
+
     void fadeInFor (const std::function<void(Event::State*)> event,
                     const int red, const int green, const int blue);
 
     void fadeOutFor(const std::function<void(Event::State*)> event,
                     const int red, const int green, const int blue);
-
 private:
     SDL_Color _txtColour;
     std::string _font;
     Graphics::Point _rendSize;
 
     void fadeInit(const std::function<void(Event::State*)> event);
-
-    inline void fadeIn (const int r, const int g, const int b) const
-    { Game::getInstance()->renderer()->fadeIn (r, g, b, 1000); }
-    
-    inline void fadeOut(const int r, const int g, const int b) const
-    { Game::getInstance()->renderer()->fadeOut(r, g, b, 1000); }
 };
 
 } // namespace State
