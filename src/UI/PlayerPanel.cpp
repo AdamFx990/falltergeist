@@ -35,7 +35,7 @@
 #include "../State/ExitConfirm.h"
 #include "../State/GameMenu.h"
 #include "../State/Inventory.h"
-#include "../State/LoadGame.h"
+#include "../State/Menus/LoadGame.h"
 #include "../State/PipBoy.h"
 #include "../State/PlayerEdit.h"
 #include "../State/SaveGame.h"

@@ -46,8 +46,6 @@ public:
 protected:
     void init() override;
 
-    void setPosition() override;
-
     void onKeyDown(Event::Keyboard* event) override;
     void onStateActivate(Event::State* event) override;
 
@@ -57,15 +55,13 @@ private:
     // Vertical offset modifier for UI elements
     static const int _vertMod = 36;
 
-    Point _origin;
-    
     SKILL skillByIndex(const int i) const;
     
     // Initalise a skilldex counter
     inline UI::BigCounter* initCounter(const int x, const int y) const
     { return new UI::BigCounter(x, y, 3); }
 
-    void initSkillButtons (const int x, const int y);
+    void initSkillButtons(const int x, const int y);
     void initSkillCounters(const int x, const int y);
 
     void onCancelButtonClick();

@@ -29,7 +29,7 @@
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
 #include "../State/ExitConfirm.h"
-#include "../State/LoadGame.h"
+#include "../State/Menus/LoadGame.h"
 #include "../State/Location.h"
 #include "../State/SaveGame.h"
 #include "../State/SettingsMenu.h"

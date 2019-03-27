@@ -50,6 +50,49 @@ Skilldex::Skilldex() : Menu() {}
 // dtor
 Skilldex::~Skilldex() {}
 
+// Initalise the skilldex UI
+void Skilldex::init()
+{
+    if(isInitalised()) return;
+    setFullscreen(false);
+    // Initalise background
+    const Point rendSize = Game::getInstance()->renderer()->size();
+    Image* background = new Image("art/intrface/skldxbox.frm");    
+    // calculate the origin of the background
+    const int x = (rendSize.x() + 640 - 2 * background->size().width()) / 2;
+    const int y = (rendSize.y() - 480 + 6);
+    background->setPosition({x, y});
+    addUI(background);
+
+    // Initalise skills UI
+    initSkillButtons(x + 14, y + 44);
+    initSkillCounters(x + 111, y + 48);
+    
+    // Initalise the title label
+    std::string text = _t(MSG_TYPE::MSG_SKILLDEX, 100); // "Skilldex"
+    Point pos = Point(x + 56, y + 14);
+    TextArea* title = createLabel(pos, text);
+    title->setWidth(76);
+    addUI(title);
+
+    // Initalise the cancel button
+    text = _t(MSG_TYPE::MSG_SKILLDEX, 101); // "Cancel"
+    const auto ha = TextArea::HorizontalAlign::LEFT;
+    const auto event = std::bind(&Skilldex::onCancelButtonClick, this);
+    createLabelledButton(Point(x + 48, y + 338), Point(22, -1), text, ha, event);
+}
+
+void Skilldex::onKeyDown(Event::Keyboard* event)
+{
+    if (event->keyCode() == SDLK_ESCAPE) onCancelButtonClick();
+}
+
+void Skilldex::onStateActivate(Event::State* event)
+{
+    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
+}
+
+
 // Returns a skill based on where it appears in the skilldex
 SKILL Skilldex::skillByIndex(const int i) const
 {
@@ -66,6 +109,7 @@ SKILL Skilldex::skillByIndex(const int i) const
     }
     return SKILL::NONE;
 }
+
 
 // Initalises all skills' buttons and their labels
 void Skilldex::initSkillButtons(const int x, const int y)
@@ -94,79 +138,20 @@ void Skilldex::initSkillCounters(const int x, const int y)
     }
 }
 
-// Initalise the skilldex UI
-void Skilldex::init()
-{
-    if (_initialized) return;
-    State::init();
-
-    setModal(true);
-    setFullscreen(false);
-    // Initalise the skilldex background and position.
-    setPosition();
-
-    // Initalise skills UI
-    initSkillButtons (_origin.x() + 14 , _origin.y() + 44);
-    initSkillCounters(_origin.x() + 111, _origin.y() + 48);
-    
-    // Initalise the title label
-    std::string text = _t(MSG_TYPE::MSG_SKILLDEX, 100); // "Skilldex"
-    Point pos = Point(_origin.x() + 56, _origin.y() + 14);
-    TextArea* title = createLabel(pos, text);
-    title->setWidth(76);
-    addUI(title);
-
-    // Initalise the cancel button
-    pos = Point(_origin.x() + 48, _origin.y() + 338);
-    const auto btnType = ImageButton::Type::SMALL_RED_CIRCLE;
-    const auto event = std::bind(&Skilldex::onCancelButtonClick, this);
-    addUI(createButton(pos, btnType, event));
-    // Label the cancel button (MSG_SKILLDEX, 101)
-    text = _t(MSG_TYPE::MSG_SKILLDEX, 101); // "Cancel"
-    pos = Point(_origin.x() + 70, _origin.y() + 337);
-    const auto va = TextArea::VerticalAlign::CENTER;
-    const auto ha = TextArea::HorizontalAlign::LEFT;
-    addUI(createLabel(pos, text, va, ha));
-}
-
-// Calculate the origin on the skilldex and add the background image
-void Skilldex::setPosition()
-{
-    // Initalise background
-    auto rendSize   = Game::getInstance()->renderer()->size();
-    auto background = createBackground("art/intrface/skldxbox.frm");    
-    // calculate the origin of the background
-    const int x = (rendSize.width() + 640 - 2 * background->size().width()) / 2;
-    const int y = (rendSize.height() - 480 + 6);
-    background->setPosition({x, y});
-    // set origin to the calculated background position
-    _origin = background->position();
-
-    addUI(background);
-}
-
-void Skilldex::onCancelButtonClick()
-{
-    Game::getInstance()->mouse()->popState();
-    Game::getInstance()->popState();
-}
-
-void Skilldex::onKeyDown(Event::Keyboard* event)
-{
-    if (event->keyCode() == SDLK_ESCAPE) onCancelButtonClick();
-}
-
-void Skilldex::onStateActivate(Event::State* event)
-{
-    Game::getInstance()->mouse()->pushState(Input::Mouse::Cursor::BIG_ARROW);
-}
-
+// Activates the skill that's been clicked
 void Skilldex::onButtonClick(SKILL skill)
 {
     Game::getInstance()->locationState()->setSkillInUse(skill);
     auto mouse = Game::getInstance()->mouse();
     mouse->popState();
     mouse->setState(Input::Mouse::Cursor::USE);
+    Game::getInstance()->popState();
+}
+
+// Closes the skilldex and reverts the cursor to its previous state
+void Skilldex::onCancelButtonClick()
+{
+    Game::getInstance()->mouse()->popState();
     Game::getInstance()->popState();
 }
 

@@ -50,15 +50,15 @@ public:
     virtual ~Menu() override;
 
 protected:
+    bool isInitalised();
     // ====== //
     // States //
     // ====== //
     void pushState(State* state);
+    void popState();
     // ========== //
     // Background //
     // ========== //
-    virtual void setPosition();
-
     Image* createBackground(std::string bgImage);
     // ====== //
     // Labels //
@@ -91,23 +91,35 @@ protected:
                               const std::string text,
                               const ImageButton::Type btnType,
                               const std::function<void(Event::Mouse*)> onClick);
+
+    void createLabelledButton(const Point &origin,
+                              const Point &labelOffset,
+                              const std::string text,
+                              const TextArea::HorizontalAlign ha,
+                              const std::function<void(Event::Mouse*)> onClick);
+
+    std::array<ImageButton*, 2> createUpDownArrows(const Point &origin) const;
     // ===== //
     // Fades //
     // ===== //
-    void fadeInFor (const std::function<void(Event::State*)> event);
-    void fadeOutFor(const std::function<void(Event::State*)> event);
+    void fadeInFor (const std::function<void(Event::State*)> event,
+                    const int red, const int green, const int blue);
+
+    void fadeOutFor(const std::function<void(Event::State*)> event,
+                    const int red, const int green, const int blue);
 
 private:
     SDL_Color _txtColour;
     std::string _font;
-    Graphics::Size _rendSize;
-    Graphics::Size _menuSize;
-    Graphics::Point _menuOrigin;
+    Graphics::Point _rendSize;
 
     void fadeInit(const std::function<void(Event::State*)> event);
-    void fadeIn () const;
-    void fadeOut() const;
 
+    inline void fadeIn (const int r, const int g, const int b) const
+    { Game::getInstance()->renderer()->fadeIn (r, g, b, 1000); }
+    
+    inline void fadeOut(const int r, const int g, const int b) const
+    { Game::getInstance()->renderer()->fadeOut(r, g, b, 1000); }
 };
 
 } // namespace State

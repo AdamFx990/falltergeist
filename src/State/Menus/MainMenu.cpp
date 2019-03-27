@@ -35,7 +35,7 @@
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
 #include "../../State/Credits.h"
-#include "../../State/LoadGame.h"
+#include "../../State/Menus/LoadGame.h"
 #include "../../State/Movie.h"
 #include "../../State/NewGame.h"
 #include "../../State/SettingsMenu.h"
@@ -61,15 +61,9 @@ MainMenu::~MainMenu()
 
 void MainMenu::init()
 {
-    using namespace UI;
-
-    if (_initialized) return;
-    State::init();
-
-    setModal(true);
+    if (isInitalised()) return;
     setFullscreen(true);
-
-    setPosition();
+    //background
     addUI("background", createBackground("art/intrface/mainmenu.frm"));
     setFont("font4.aaf", { 0xb8, 0x9c, 0x28, 0xff });
     // Constants for UI elements

@@ -22,7 +22,6 @@
 
 // C++ standard includes
 #include <string>
-#include <thread>
 
 // Falltergeist includes
 #include "../../Game/Game.h"
@@ -47,6 +46,17 @@ Menu::Menu() : State()
 // dtor
 Menu::~Menu() {}
 
+// Checks if the state has been initalised. if not, begin initalising
+bool Menu::isInitalised()
+{
+    if (_initialized) return true;
+    
+    State::init();
+    setModal(true);
+    
+    return false;
+}
+
 // ====== //
 // States //
 // ====== //
@@ -57,23 +67,25 @@ void Menu::pushState(State* state)
     Game::getInstance()->pushState(state);
 }
 
+void Menu::popState()
+{
+    fadeDoneHandler().clear();
+    Game::getInstance()->popState();
+}
+
 // ========== //
 // Background //
 // ========== //
 
-// Recalculate the menu's position
-void Menu::setPosition()
-{
-    State::setPosition((_rendSize - Point(640, 480)) / 2);
-}
-
+// Creates the background image then re-calculate state position
 Image* Menu::createBackground(std::string bgImage)
 {
+    // Create background
     Image* background = new Image(bgImage);
-    // Initalise size & position pointers
-    _menuSize   = background->size();
-    _menuOrigin = background->position();
-
+    // Calculate & set position
+    const Point menuSize = background->size();
+    State::setPosition((_rendSize - menuSize) / 2);
+    
     return background;
 }
 
@@ -166,38 +178,58 @@ void Menu::createLabelledButton(const Point &origin,
     addUI(label);
 }
 
+// Creates a button with a aligned label and add it to the UI
+void Menu::createLabelledButton(const Point &origin,
+                                const Point &labelOffset,
+                                const std::string text,
+                                const TextArea::HorizontalAlign ha,
+                                const std::function<void(Event::Mouse*)> onClick)
+{
+    const TextArea::VerticalAlign va = TextArea::VerticalAlign::CENTER;
+    // Create a button at the origin
+    ImageButton* button = createButton(origin, ImageButton::Type::SMALL_RED_CIRCLE, onClick);
+    // Offset the label's origin so it appears inside the button
+    TextArea* label = createLabel(origin + labelOffset, text, va, ha);
+    // Set label to the specified width (usually when the button is a red circle).
+
+    addUI(button);
+    addUI(label);
+}
+
+// returns two arrow buttons (up[0] | down[1]). 
+std::array<ImageButton*, 2> Menu::createUpDownArrows(const Point &origin) const
+{
+    std::array<ImageButton*, 2> buttons;
+    buttons[0] = new ImageButton(ImageButton::Type::SMALL_UP_ARROW, origin);
+    const Point pos(origin.x(), origin.y() + 24);
+    buttons[1] = new ImageButton(ImageButton::Type::SMALL_DOWN_ARROW, pos);
+    return buttons;
+}
+
 // ===== //
 // Fades //
 // ===== //
 
 // Fade in for state push
-void Menu::fadeInFor(const std::function<void(Event::State*)> event)
+void Menu::fadeInFor(const std::function<void(Event::State*)> event,
+                     const int red, const int green, const int blue)
 {
     fadeInit(event);
-    fadeIn();
+    fadeIn(red, green, blue);
 }
 
 // Fade out for state pop
-void Menu::fadeOutFor(const std::function<void(Event::State*)> event)
+void Menu::fadeOutFor(const std::function<void(Event::State*)> event,
+                      const int red, const int green, const int blue)
 {
     fadeInit(event);
-    fadeOut();
+    fadeOut(red, green, blue);
 }
 
 void Menu::fadeInit(const std::function<void(Event::State*)> event)
 {
     fadeDoneHandler().clear();
     fadeDoneHandler().add(event);
-}
-
-void Menu::fadeIn() const
-{
-    Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
-}
-
-void Menu::fadeOut() const
-{
-    Game::getInstance()->renderer()->fadeOut(0, 0, 0, 1000);
 }
 
 } // namespace State

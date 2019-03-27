@@ -56,9 +56,9 @@ private:
     void onSettingsButtonClick(Event::Mouse* event);
 
     inline void doIntro()
-    { fadeOutFor(std::bind(&MainMenu::onIntro, this)); };
+    { fadeOutFor(std::bind(&MainMenu::onIntro, this), 0, 0, 0); };
     inline void doExit()
-    { fadeOutFor(std::bind(&MainMenu::onExit, this)); };
+    { fadeOutFor(std::bind(&MainMenu::onExit, this), 0, 0, 0); };
 
     void onIntro();
     void onExit();
