@@ -39,7 +39,7 @@
 #include "../Input/Mouse.h"
 #include "../ResourceManager.h"
 #include "../State/State.h"
-#include "../State/GameMenu.h"
+#include "../State/Menus/GameMenu.h"
 #include "../State/InventoryDragItem.h"
 #include "../State/Location.h"
 #include "../UI/Image.h"

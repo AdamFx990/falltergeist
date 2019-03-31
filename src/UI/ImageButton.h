@@ -62,7 +62,7 @@ public:
         PANEL_MAP,
         PANEL_CHA,
         PANEL_PIP,
-        OPTIONS_BUTTON,
+        OPTIONS,
         SKILLDEX,
         INVENTORY_UP_ARROW,
         INVENTORY_DOWN_ARROW,

@@ -23,32 +23,34 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../State/State.h"
+#include "../../State/Menus/Menu.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    namespace State
-    {
-        class GameMenu : public State
-        {
-            public:
-                GameMenu();
-                ~GameMenu() override;
+namespace State
+{
 
-                void init() override;
+class GameMenu : public Menu
+{
+public:
+    GameMenu();
+    ~GameMenu() override;
 
-                void doSaveGame();
-                void doLoadGame();
-                void doPreferences();
-                void doExit();
-                void closeMenu();
+    void init() override;
 
-                void onKeyDown(Event::Keyboard* event) override;
-                void onStateActivate(Event::State* event) override;
-                void onStateDeactivate(Event::State* event) override;
-        };
-    }
-}
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+
+private:
+    void onClick(const int i);
+    inline void closeMenu() { popState(); }
+    
+};
+
+} // State
+} // Falltergeist
+
 #endif // FALLTERGEIST_STATE_GAMEMENU_H

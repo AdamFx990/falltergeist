@@ -33,7 +33,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
 #include "../State/ExitConfirm.h"
-#include "../State/GameMenu.h"
+#include "../State/Menus/GameMenu.h"
 #include "../State/Inventory.h"
 #include "../State/Menus/LoadGame.h"
 #include "../State/PipBoy.h"

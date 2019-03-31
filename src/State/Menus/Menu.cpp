@@ -50,10 +50,10 @@ Menu::~Menu() {}
 bool Menu::isInitalised()
 {
     if (_initialized) return true;
-    
+   
     State::init();
     setModal(true);
-    
+
     return false;
 }
 
@@ -63,14 +63,8 @@ bool Menu::isInitalised()
 
 void Menu::pushState(State* state)
 {
-    fadeDoneHandler().clear();
+    fadeClear();
     Game::getInstance()->pushState(state);
-}
-
-void Menu::popState()
-{
-    fadeDoneHandler().clear();
-    Game::getInstance()->popState();
 }
 
 // ========== //
@@ -107,7 +101,7 @@ TextArea* Menu::createLabel(const Point& origin,
                             const TextArea::HorizontalAlign ha) const
 {
     TextArea *label = createLabel(origin, text);
-    label->setVerticalAlign  (va);
+    label->setVerticalAlign(va);
     label->setHorizontalAlign(ha);
 
     return label;

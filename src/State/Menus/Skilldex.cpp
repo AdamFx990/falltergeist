@@ -151,8 +151,8 @@ void Skilldex::onButtonClick(SKILL skill)
 // Closes the skilldex and reverts the cursor to its previous state
 void Skilldex::onCancelButtonClick()
 {
-    Game::getInstance()->mouse()->popState();
-    Game::getInstance()->popState();
+    popMouseState();
+    popState();
 }
 
 } // State

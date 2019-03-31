@@ -31,6 +31,7 @@
 #include "../../Event/Mouse.h"
 #include "../../Base/Delegate.h"
 #include "../../Game/Game.h"
+#include "../../Input/Mouse.h"
 #include "../../functions.h"
 
 // Third party includes
@@ -55,7 +56,15 @@ protected:
     // States //
     // ====== //
     void pushState(State* state);
-    void popState();
+    // Switch to previous state
+    inline void popState()
+    { Game::getInstance()->popState(); }
+    // Switch to previous cursor
+    inline void popMouseState()
+    { Game::getInstance()->mouse()->popState(); }
+    // Switch to a new cursor
+    inline void setMouseState(const Input::Mouse::Cursor cursor)
+    { Game::getInstance()->mouse()->setState(cursor); }
     // ========== //
     // Background //
     // ========== //
@@ -102,8 +111,14 @@ protected:
     // ===== //
     // Fades //
     // ===== //
+
+    // Cancel any queued fades
+    inline void fadeClear()
+    { fadeDoneHandler().clear(); }
+    // Make state fade in from an RGB colour
     inline void fadeIn (const int r, const int g, const int b) const
     { Game::getInstance()->renderer()->fadeIn (r, g, b, 1000); }
+    // Make state fade out from an RGB colour
     inline void fadeOut(const int r, const int g, const int b) const
     { Game::getInstance()->renderer()->fadeOut(r, g, b, 1000); }
 
