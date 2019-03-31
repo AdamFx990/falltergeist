@@ -86,7 +86,7 @@ void GameMenu::init()
 
 void GameMenu::onStateActivate(Event::State* event)
 {
-    pushMouseState(Input::Mouse::Cursor::BIG_ARROW);
+    setMouseState(Input::Mouse::Cursor::BIG_ARROW);
 }
 
 void GameMenu::onStateDeactivate(Event::State* event)
