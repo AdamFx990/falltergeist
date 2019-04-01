@@ -34,7 +34,7 @@
 #include "../../Input/Mouse.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
-#include "../../State/Credits.h"
+#include "../../State/Menus/Credits.h"
 #include "../../State/Menus/LoadGame.h"
 #include "../../State/Movie.h"
 #include "../../State/NewGame.h"
@@ -84,16 +84,16 @@ void MainMenu::init()
     for (int i = 0; i < _entryCount; i++)
     {
         const Point pos = Point(origin.x(), origin.y() + vertMod * i);
-        const auto event = std::bind(&MainMenu::onButtonClick, this, i);
-        createLabelledButton(pos, lblOffset, lblWidth, text[i], btnType, event);
+        const auto func = std::bind(&MainMenu::onButtonClick, this, i);
+        createLabelledButton(pos, lblOffset, lblWidth, text[i], btnType, func);
     }
 }
 
 void MainMenu::onStateActivate(Event::State* event)
 {
-    Game::getInstance()->mouse()->setState(Input::Mouse::Cursor::BIG_ARROW);
+    setMouseState(Input::Mouse::Cursor::BIG_ARROW);
     Game::getInstance()->mixer()->playACMMusic("07desert.acm", true);
-    Game::getInstance()->renderer()->fadeIn(0, 0, 0, 1000);
+    fadeIn(0, 0, 0);
 }
 
 // Triggers an event for the button that is clicked
@@ -137,7 +137,7 @@ void MainMenu::onKeyDown(Event::Keyboard* event)
             pushState(new LoadGame());
             break;
         case SDLK_o: // O
-            Game::getInstance()->pushState(new SettingsMenu());
+            pushState(new SettingsMenu());
             break;
         case SDLK_c: // C
             pushState(new Credits());
@@ -151,14 +151,14 @@ void MainMenu::onKeyDown(Event::Keyboard* event)
 
 void MainMenu::onIntro()
 {
-    fadeDoneHandler().clear();
-    Game::getInstance()->pushState(new Movie(17));
-    Game::getInstance()->pushState(new Movie(1));
+    fadeClear();
+    pushState(new Movie(17));
+    pushState(new Movie(1));
 }
 
 void MainMenu::onExit()
 {
-    fadeDoneHandler().clear();
+    fadeClear();
     Game::getInstance()->mixer()->stopMusic();
     Game::getInstance()->quit();
 }

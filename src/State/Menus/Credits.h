@@ -23,35 +23,42 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../State/State.h"
+#include "../../State/Menus/Menu.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    namespace UI
-    {
-        class TextArea;
-    }
-    namespace State
-    {
-        class Credits : public State
-        {
-            public:
-                Credits();
-                ~Credits() override;
+namespace UI
+{
+class TextArea;
+} // UI
+namespace State
+{
 
-                void init() override;
-                void think() override;
-                void handle(Event::Event* event) override;
+class Credits : public Menu
+{
+public:
+    Credits();
+    ~Credits() override;
 
-                void onCreditsFinished();
-                void onCreditsFadeDone(Event::State* event);
-                void onStateActivate(Event::State* event) override;
-            private:
-                std::vector<UI::TextArea*> _lines;
-                unsigned long int _lastTicks;
-        };
-    }
-}
+    void init() override;
+    void onStateActivate(Event::State* event) override;
+
+protected:
+    void think() override;
+    void handle(Event::Event* event) override;
+
+private:
+    std::vector<UI::TextArea*> _lines;
+    unsigned long int _lastTicks;
+
+    void onCreditsFadeDone();
+    inline void onCreditsFinished()
+    { fadeOutFor(std::bind(&Credits::onCreditsFadeDone, this), 0, 0, 0); }
+};
+
+} // State
+} // Falltergeist
+
 #endif // FALLTERGEIST_STATE_CREDITS_H

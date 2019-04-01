@@ -58,29 +58,25 @@ void LoadGame::init()
 {
     if (isInitalised()) return;
     setFullscreen(true);
-    
-    // background
-    Image* background = createBackground("art/intrface/lsgame.frm");
-    addUI("background", background);
+    // Background
+    addUI("background", createBackground("art/intrface/lsgame.frm"));
     setFont("font3.aaf", { 0x90, 0x78, 0x24, 0xff });
-    
     // Buttons
     const Point lblOffset = Point(19, -1);
     const auto ha = TextArea::HorizontalAlign::LEFT;
-    // Arrows
+    // Arrow buttons
     const auto arrows = createUpDownArrows(Point(35, 58));
     addUI("button_up", arrows[0]);
     addUI("button_down", arrows[1]);
-    // Done
+    // Done button
     Point pos(391, 349);
     std::string text = _t(MSG_OPTIONS, 300);
     createLabelledButton(pos, lblOffset, text, ha, std::bind(&LoadGame::popState, this));
-    // Cancel
+    // Cancel button
     pos.setX(495);
     text = _t(MSG_OPTIONS, 121);
     createLabelledButton(pos, lblOffset, text, ha, std::bind(&LoadGame::doCancel, this));
-
-    // Load Game label
+    // Load Game title label
     pos = Point(48, 27);
     text = _t(MSG_LOAD_SAVE, 110);
     addUI(createLabel(pos, text));
@@ -90,7 +86,6 @@ void LoadGame::doCancel()
 {
     if (_fromMainMenu)
     {
-        // Fade out if loaded from main menu
         fadeOutFor(std::bind(&LoadGame::popState, this), 255, 255, 255);
     }
     else 

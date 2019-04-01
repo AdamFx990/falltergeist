@@ -25,6 +25,7 @@
 
 // Falltergeist includes
 #include "../../Game/Game.h"
+#include "../../ResourceManager.h"
 #include "../../Graphics/Renderer.h"
 
 // Third party includes
@@ -39,7 +40,7 @@ Menu::Menu() : State()
 {
     // Initalise with the most commonly used menu font & colour
     _txtColour  = {0xb8, 0x9c, 0x28, 0xff};
-    _font = "font3.aaf";
+    _font = ResourceManager::getInstance()->font("font3.aaf");
     // Initalise the renderer size var
     _rendSize = Game::getInstance()->renderer()->size();
 }
@@ -50,47 +51,31 @@ Menu::~Menu() {}
 bool Menu::isInitalised()
 {
     if (_initialized) return true;
-   
     State::init();
     setModal(true);
-
     return false;
 }
-
-// ====== //
-// States //
-// ====== //
-
-void Menu::pushState(State* state)
-{
-    fadeClear();
-    Game::getInstance()->pushState(state);
-}
-
 // ========== //
-// Background //
+// BACKGROUND //
 // ========== //
 
 // Creates the background image then re-calculate state position
 Image* Menu::createBackground(std::string bgImage)
 {
-    // Create background
     Image* background = new Image(bgImage);
-    // Calculate & set position
     const Point menuSize = background->size();
+    // Centre the background image
     State::setPosition((_rendSize - menuSize) / 2);
-    
     return background;
 }
-
-// ====== //
-// Labels //
-// ====== //
+// ========== //
+// TEXT AREAS //
+// ========== //
 
 // Set the font & colour used by labels & labelled buttons
 void Menu::setFont(const std::string font, const SDL_Colour colour)
 {
-    _font = font;
+    _font = ResourceManager::getInstance()->font(font);
     _txtColour = colour;
 }
 
@@ -103,7 +88,6 @@ TextArea* Menu::createLabel(const Point& origin,
     TextArea *label = createLabel(origin, text);
     label->setVerticalAlign(va);
     label->setHorizontalAlign(ha);
-
     return label;
 }
 
@@ -112,12 +96,10 @@ TextArea* Menu::createLabel(const Point& origin, const std::string text) const
 {
     TextArea *label = new TextArea(text, origin);
     label->setFont(_font, _txtColour);
-   
     return label;
 }
-
 // ======= //
-// Buttons //
+// BUTTONS //
 // ======= //
 
 // Returns a button with a linked event handler
@@ -127,7 +109,6 @@ ImageButton* Menu::createButton(const Point& origin,
 {
     ImageButton *button = new ImageButton(btnType, origin);
     button->mouseClickHandler().add(onClick);
-
     return button;
 }
 
@@ -140,13 +121,11 @@ void Menu::createLabelledButton(const Point &origin,
 {
     const auto va = TextArea::VerticalAlign::CENTER;
     const auto ha = TextArea::HorizontalAlign::CENTER;
-    // Create a button at the origin
     ImageButton* button = createButton(origin, btnType, onClick);
     // Offset the label's origin so it appears inside the button
     TextArea* label = createLabel(origin + labelOffset, text, va, ha);
-    // Button width - 2 so it's always at least 1px inside the button's borders.
+    // Button width - 4 so it's always at least 2px inside the button's borders.
     label->setSize(button->size() - 4);
-
     addUI(button);
     addUI(label);
 }
@@ -167,7 +146,6 @@ void Menu::createLabelledButton(const Point &origin,
     TextArea* label = createLabel(origin + labelOffset, text, va, ha);
     // Set label to the specified width (usually when the button is a red circle).
     label->setWidth(labelWidth);
-
     addUI(button);
     addUI(label);
 }
@@ -184,8 +162,6 @@ void Menu::createLabelledButton(const Point &origin,
     ImageButton* button = createButton(origin, ImageButton::Type::SMALL_RED_CIRCLE, onClick);
     // Offset the label's origin so it appears inside the button
     TextArea* label = createLabel(origin + labelOffset, text, va, ha);
-    // Set label to the specified width (usually when the button is a red circle).
-
     addUI(button);
     addUI(label);
 }
@@ -199,18 +175,9 @@ std::array<ImageButton*, 2> Menu::createUpDownArrows(const Point &origin) const
     buttons[1] = new ImageButton(ImageButton::Type::SMALL_DOWN_ARROW, pos);
     return buttons;
 }
-
 // ===== //
-// Fades //
+// FADES //
 // ===== //
-
-// Fade in for state push
-void Menu::fadeInFor(const std::function<void(Event::State*)> event,
-                     const int red, const int green, const int blue)
-{
-    fadeInit(event);
-    fadeIn(red, green, blue);
-}
 
 // Fade out for state pop
 void Menu::fadeOutFor(const std::function<void(Event::State*)> event,
@@ -226,5 +193,5 @@ void Menu::fadeInit(const std::function<void(Event::State*)> event)
     fadeDoneHandler().add(event);
 }
 
-} // namespace State
-} // namespace Falltergeist
+} // State
+} // Falltergeist

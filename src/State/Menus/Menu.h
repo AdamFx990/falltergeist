@@ -52,10 +52,10 @@ public:
 
 protected:
     bool isInitalised();
-    // ====== //
-    // States //
-    // ====== //
-    void pushState(State* state);
+
+    // STATES //
+    inline void pushState(State* state)
+    { Game::getInstance()->pushState(state); }
     // Switch to previous state
     inline void popState()
     { Game::getInstance()->popState(); }
@@ -65,25 +65,23 @@ protected:
     // Switch to a new cursor
     inline void setMouseState(const Input::Mouse::Cursor cursor)
     { Game::getInstance()->mouse()->setState(cursor); }
-    // ========== //
-    // Background //
-    // ========== //
+
+    // BACKGROUND //
     Image* createBackground(std::string bgImage);
-    // ====== //
-    // Labels //
-    // ====== //
+
+    // TEXT AREAS //
+    inline Graphics::Font* currentFont() { return _font; }
     virtual void setFont(const std::string font, const SDL_Colour colour);
 
     TextArea* createLabel(const Point &origin,
                           const std::string text) const;
-    
+
     TextArea* createLabel(const Point &origin,
                           const std::string text,
                           const TextArea::VerticalAlign va,
                           const TextArea::HorizontalAlign ha) const;
-    // ======= //
-    // Buttons //
-    // ======= //
+
+    // BUTTONS //
     ImageButton* createButton(const Point &origin,
                               const ImageButton::Type btnType,
                               const std::function<void(Event::Mouse*)> onClick) const;
@@ -108,9 +106,10 @@ protected:
                               const std::function<void(Event::Mouse*)> onClick);
 
     std::array<ImageButton*, 2> createUpDownArrows(const Point &origin) const;
-    // ===== //
-    // Fades //
-    // ===== //
+
+    // FADES //
+    void fadeOutFor(const std::function<void(Event::State*)> event,
+                    const int red, const int green, const int blue);
 
     // Cancel any queued fades
     inline void fadeClear()
@@ -122,20 +121,14 @@ protected:
     inline void fadeOut(const int r, const int g, const int b) const
     { Game::getInstance()->renderer()->fadeOut(r, g, b, 1000); }
 
-    void fadeInFor (const std::function<void(Event::State*)> event,
-                    const int red, const int green, const int blue);
-
-    void fadeOutFor(const std::function<void(Event::State*)> event,
-                    const int red, const int green, const int blue);
 private:
+    Graphics::Font* _font;
     SDL_Color _txtColour;
-    std::string _font;
     Graphics::Point _rendSize;
-
     void fadeInit(const std::function<void(Event::State*)> event);
 };
 
-} // namespace State
-} // namespace Falltergeist
+} // State
+} // Falltergeist
 
 #endif // FALLTERGEIST_STATE_MENU_H
