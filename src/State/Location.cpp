@@ -65,7 +65,7 @@
 #include "../ResourceManager.h"
 #include "../Settings.h"
 #include "../State/CursorDropdown.h"
-#include "../State/ExitConfirm.h"
+#include "../State/Menus/ExitConfirm.h"
 #include "../State/WorldMap.h"
 #include "../State/Menus/MainMenu.h"
 #include "../UI/Animation.h"

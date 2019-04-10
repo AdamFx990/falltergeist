@@ -31,7 +31,7 @@
 #include "../../Input/Mouse.h"
 #include "../../Logger.h"
 #include "../../ResourceManager.h"
-#include "../../State/ExitConfirm.h"
+#include "../../State/Menus/ExitConfirm.h"
 #include "../../State/Location.h"
 #include "../../State/SettingsMenu.h"
 #include "../../UI/Image.h"

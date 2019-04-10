@@ -32,7 +32,7 @@
 #include "../Game/ItemObject.h"
 #include "../Graphics/Renderer.h"
 #include "../Input/Mouse.h"
-#include "../State/ExitConfirm.h"
+#include "../State/Menus/ExitConfirm.h"
 #include "../State/Menus/GameMenu.h"
 #include "../State/Inventory.h"
 #include "../State/Menus/LoadGame.h"

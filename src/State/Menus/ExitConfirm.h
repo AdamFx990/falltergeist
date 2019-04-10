@@ -23,34 +23,42 @@
 // C++ standard includes
 
 // Falltergeist includes
-#include "../State/State.h"
+#include "../../State/Menus/Menu.h"
 
 // Third party includes
 
 namespace Falltergeist
 {
-    namespace Event
-    {
-        class Keyboard;
-        class State;
-    }
-    namespace State
-    {
-        class ExitConfirm : public State
-        {
-            public:
-                ExitConfirm();
-                ~ExitConfirm() override;
+namespace Event
+{
+class Keyboard;
+class State;
+} // Event
 
-                void init() override;
+namespace State
+{
+class ExitConfirm : public Menu
+{
+public:
+    ExitConfirm();
+    ~ExitConfirm() override;
 
-                void doYes();
-                void doNo();
+    void init() override;
 
-                void onKeyDown(Event::Keyboard* event) override;
-                void onStateActivate(Event::State* event) override;
-                void onStateDeactivate(Event::State* event) override;
-        };
-    }
-}
+protected:
+    void onKeyDown(Event::Keyboard* event) override;
+    void onStateActivate(Event::State* event) override;
+    void onStateDeactivate(Event::State* event) override;
+
+private:
+    void createDoneButton(Point &origin, unsigned index);
+
+    void onClick(const unsigned i);
+    void doYes();
+    inline void doNo() { popState(); }
+};
+
+} // State
+} // Falltergeist
+
 #endif // FALLTERGEIST_STATE_EXITCONFIRM_H

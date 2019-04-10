@@ -28,7 +28,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Renderer.h"
 #include "../ResourceManager.h"
-#include "../State/ExitConfirm.h"
+#include "../State/Menus/ExitConfirm.h"
 #include "../State/Menus/LoadGame.h"
 #include "../State/Location.h"
 #include "../State/SaveGame.h"

@@ -29,7 +29,7 @@
 #include "../../Graphics/Renderer.h"
 #include "../../Input/Mouse.h"
 #include "../../ResourceManager.h"
-#include "../../State/ExitConfirm.h"
+#include "../../State/Menus/ExitConfirm.h"
 #include "../../State/Menus/LoadGame.h"
 #include "../../State/Location.h"
 #include "../../State/SaveGame.h"
