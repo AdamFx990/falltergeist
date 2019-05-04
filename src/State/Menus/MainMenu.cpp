@@ -37,7 +37,7 @@
 #include "../../State/Menus/Credits.h"
 #include "../../State/Menus/LoadGame.h"
 #include "../../State/Movie.h"
-#include "../../State/NewGame.h"
+#include "../../State/Menus/NewGame.h"
 #include "../../State/SettingsMenu.h"
 #include "../../UI/Animation.h"
 #include "../../UI/Image.h"

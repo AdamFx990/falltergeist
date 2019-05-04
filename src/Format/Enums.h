@@ -32,8 +32,9 @@
 
 // Third party includes
 
-enum class STAT : uint32_t
+enum class STAT : int32_t
 {
+    NONE = -1,
     STRENGTH = 0,
     PERCEPTION,
     ENDURANCE,
